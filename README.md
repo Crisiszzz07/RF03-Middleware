@@ -39,6 +39,7 @@ Puerto ocupado: `java -jar target/rf03-chain-1.0.0.jar --server.port=8081`, y ab
 | Token inválido | `DEMO-INVALIDO` | Ninguna | 401 | No | Sí; autorización y radicación omitidas |
 | Evaluador | `DEMO-EVALUADOR` | evaluador-demo / EVALUADOR | 403 | No | Sí; radicación omitida |
 | Investigador | `DEMO-INVESTIGADOR` | investigadora-demo / INVESTIGADOR | 200 + RF03-0001… | Sí | Sí |
+
 ![img_1.png](img_1.png)
 Edite el título (5 a 120 caracteres tras quitar espacios exteriores). La validación de datos ocurre **antes de iniciar la cadena**, tanto en el cliente web como en `ClienteRadicacion`. Datos inválidos devuelven 400 y no producen auditoría de seguridad. JSON malformado o con campos desconocidos también devuelve 400 en el adaptador HTTP. Esto se distingue del rechazo 401/403 de los filtros.
 ![img_3.png](img_3.png)
