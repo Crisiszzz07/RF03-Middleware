@@ -1,5 +1,5 @@
 # RF03 · Chain of Responsibility en seguridad
-
+![img.png](img.png)
 Prototipo académico para radicar una propuesta de investigación. **RF03 corresponde aquí al dominio de investigaciones.** Java ejecuta la cadena y entrega una traza estructurada; el navegador reproduce los eventos recibidos y muestra sus fragmentos Java.
 
 **No es seguridad para producción.** Token, permisos, persistencia de propuestas y auditoría se simulan. No hay conexión con un SSO, una universidad, una base de datos ni servicios reales. Las reglas son supuestos ilustrativos, no requisitos institucionales verificados. No se requieren cuentas ni claves.
@@ -34,15 +34,16 @@ Puerto ocupado: `java -jar target/rf03-chain-1.0.0.jar --server.port=8081`, y ab
 **Estado de verificación de esta entrega:** TypeScript compiló y las comprobaciones estáticas pasaron. Este entorno no dispone de Java/Maven, no permite descargar dependencias ni abrir sockets, y bloquea el arranque de Chromium. Por ello las pruebas JUnit, la compilación Java, el servidor, los escenarios en navegador y la revisión visual móvil están **pendientes**; no se incluye un JAR sin compilar. Consulte [docs/VERIFICACION.md](docs/VERIFICACION.md). `clean verify` compila, prueba y genera el JAR en un entorno con JDK y acceso inicial a Maven Central.
 
 ## Los tres escenarios
+![img_4.png](img_4.png)
 
 | Selección | Token ficticio de demostración | Identidad validada en Java | Resultado | Propuesta | Auditoría |
 |---|---|---|---|---|---|
 | Token inválido | `DEMO-INVALIDO` | Ninguna | 401 | No | Sí; autorización y radicación omitidas |
 | Evaluador | `DEMO-EVALUADOR` | evaluador-demo / EVALUADOR | 403 | No | Sí; radicación omitida |
 | Investigador | `DEMO-INVESTIGADOR` | investigadora-demo / INVESTIGADOR | 200 + RF03-0001… | Sí | Sí |
-
+![img_1.png](img_1.png)
 Edite el título (5 a 120 caracteres tras quitar espacios exteriores). La validación de datos ocurre **antes de iniciar la cadena**, tanto en el cliente web como en `ClienteRadicacion`. Datos inválidos devuelven 400 y no producen auditoría de seguridad. JSON malformado o con campos desconocidos también devuelve 400 en el adaptador HTTP. Esto se distingue del rechazo 401/403 de los filtros.
-
+![img_3.png](img_3.png)
 **200 se usa únicamente para mantener coherencia con los escenarios didácticos**, no como decisión de diseño de una API de producción. El código central devuelve un resultado con código numérico; el controlador lo transforma en estado HTTP.
 
 ## Patrón, clases y configuración
@@ -84,6 +85,7 @@ Cree una subclase de `ManejadorSeguridad`, reciba el sucesor en el constructor, 
 Para exponer el nuevo filtro en este laboratorio también añada su nodo a `index.html`, sus eventos y marcadores de fuente, las pruebas y su representación UML. Esto amplía la presentación; no requiere modificar el algoritmo de los filtros previos.
 
 ## Interfaz y traza
+![img_2.png](img_2.png)
 
 La petición se procesa completamente en Java antes de entregar el JSON. La interfaz etiqueta la reproducción como tal; pausar **no detiene el servidor**. El resultado real y el registro ya están disponibles mientras se reproduce la traza.
 
