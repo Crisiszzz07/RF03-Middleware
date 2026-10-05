@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1460 1330" role="img" aria-labelledby="title desc"><title id="title">RF03: secuencia 401, 403 y 200</title><desc id="desc">Las tres alternativas retornan a Auditoría, que registra y responde al cliente.</desc><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#66418b" stroke-width="1.5"/></marker></defs><rect width="1460" height="1330" fill="#faf8fe"/><style>text{font:17px system-ui,Segoe UI,sans-serif;fill:#30213f}.small{font-size:15px}.title{font-size:23px;font-weight:700}.heading{font-size:16px;font-weight:700}</style><text x="30" y="40" class="title">RF03 · Secuencia: ida, decisiones y retorno auditado</text>
+<rect x="10" y="70" width="220" height="65" rx="5" fill="#eee5fa" stroke="#b9a6cd"/><text x="120" y="108" text-anchor="middle" class="heading" style="font-size:14px">ClienteRadicacion</text><path d="M120 135 V1230" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<rect x="255" y="70" width="220" height="65" rx="5" fill="#eee5fa" stroke="#b9a6cd"/><text x="365" y="108" text-anchor="middle" class="heading" style="font-size:14px">AuditoriaMiddleware</text><path d="M365 135 V1230" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<rect x="500" y="70" width="220" height="65" rx="5" fill="#eee5fa" stroke="#b9a6cd"/><text x="610" y="108" text-anchor="middle" class="heading" style="font-size:14px">AutenticacionMiddleware</text><path d="M610 135 V1230" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<rect x="745" y="70" width="220" height="65" rx="5" fill="#eee5fa" stroke="#b9a6cd"/><text x="855" y="108" text-anchor="middle" class="heading" style="font-size:14px">AutorizacionMiddleware</text><path d="M855 135 V1230" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<rect x="990" y="70" width="220" height="65" rx="5" fill="#eee5fa" stroke="#b9a6cd"/><text x="1100" y="108" text-anchor="middle" class="heading" style="font-size:14px">RadicarPropuestaHandler</text><path d="M1100 135 V1230" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<rect x="1220" y="70" width="220" height="65" rx="5" fill="#eee5fa" stroke="#b9a6cd"/><text x="1330" y="108" text-anchor="middle" class="heading" style="font-size:14px">RegistroAuditoriaEnMemoria</text><path d="M1330 135 V1230" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<path d="M120 190 H365" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="242.5" y="181" text-anchor="middle" class="small">procesar(solicitud)</text>
+<path d="M365 240 H610" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="487.5" y="231" text-anchor="middle" class="small">continuar → procesar</text>
+<rect x="475" y="260" width="360" height="38" rx="5" fill="#f3eef9"/><text x="487" y="285" class="small">validador.validar(token)</text>
+<rect x="25" y="325" width="1405" height="115" fill="#fff4f6" fill-opacity=".8" stroke="#b9a6cd"/><text x="40" y="350" class="heading">alt · token inválido → 401</text>
+<rect x="25" y="465" width="1405" height="190" fill="#fff4f6" fill-opacity=".8" stroke="#b9a6cd"/><text x="40" y="490" class="heading">else · evaluador válido, sin permiso → 403</text>
+<rect x="25" y="680" width="1405" height="290" fill="#f3faf6" fill-opacity=".8" stroke="#b9a6cd"/><text x="40" y="705" class="heading">else · investigador válido, con permiso → 200</text>
+<path d="M610 400 H365" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="487.5" y="391" text-anchor="middle" class="small">401 · token inválido</text>
+<rect x="890" y="375" width="360" height="38" rx="5" fill="#f3eef9"/><text x="902" y="400" class="small">Autorización y radicación: no ejecutados</text>
+<path d="M610 535 H855" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="732.5" y="526" text-anchor="middle" class="small">identidad validada → procesar</text>
+<rect x="850" y="550" width="360" height="38" rx="5" fill="#f3eef9"/><text x="862" y="575" class="small">politica.puedeRadicar(identidad) = false</text>
+<path d="M855 605 H610" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="732.5" y="596" text-anchor="middle" class="small">403 · sin permiso</text>
+<path d="M610 640 H365" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="487.5" y="631" text-anchor="middle" class="small">403</text>
+<path d="M610 750 H855" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="732.5" y="741" text-anchor="middle" class="small">identidad validada → procesar</text>
+<rect x="730" y="765" width="360" height="38" rx="5" fill="#f3eef9"/><text x="742" y="790" class="small">politica.puedeRadicar(identidad) = true</text>
+<path d="M855 840 H1100" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="977.5" y="831" text-anchor="middle" class="small">continuar → procesar</text>
+<rect x="970" y="850" width="360" height="38" rx="5" fill="#f3eef9"/><text x="982" y="875" class="small">repositorio.guardar(solicitud)</text>
+<path d="M1100 915 H855" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="977.5" y="906" text-anchor="middle" class="small">200 + identificador</text>
+<path d="M855 945 H610" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="732.5" y="936" text-anchor="middle" class="small">200</text>
+<path d="M610 970 H365" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="487.5" y="961" text-anchor="middle" class="small">200</text>
+<path d="M365 1040 H1330" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="847.5" y="1031" text-anchor="middle" class="small">registrar(solicitud, respuesta) · común a 401 / 403 / 200</text>
+<path d="M1330 1100 H365" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="847.5" y="1091" text-anchor="middle" class="small">Registro en memoria · sin token</text>
+<path d="M365 1170 H120" fill="none" stroke="#66418b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="242.5" y="1161" text-anchor="middle" class="small">respuesta final</text>
+<text x="30" y="1260" class="heading">Auditoría envuelve la llamada y registra cuando retorna el sucesor.</text><text x="30" y="1300" class="small">Título inválido: ClienteRadicacion responde 400 antes de iniciar la cadena (validación de datos).</text></svg>

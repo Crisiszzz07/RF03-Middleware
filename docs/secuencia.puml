@@ -1,0 +1,44 @@
+@startuml
+title RF03 · radicar una propuesta (datos válidos)
+participant ClienteRadicacion as C
+participant AuditoriaMiddleware as A
+participant AutenticacionMiddleware as N
+participant AutorizacionMiddleware as Z
+participant RadicarPropuestaHandler as R
+participant RegistroAuditoriaEnMemoria as L
+C -> A : procesar(solicitud)
+activate A
+A -> N : continuar → procesar(solicitud)
+activate N
+N -> N : validador.validar(token)
+alt token inválido
+  N --> A : RespuestaRadicacion(401)
+  note over Z,R : No ejecutados: no se llama a procesar
+else token válido
+  N -> N : solicitud.autenticar(identidad)
+  N -> Z : continuar → procesar(solicitud)
+  activate Z
+  Z -> Z : politica.puedeRadicar(solicitud.identidad())
+  alt sin permiso (evaluador)
+    Z --> N : RespuestaRadicacion(403)
+    note over R : No ejecutado
+    N --> A : respuesta 403
+  else con permiso (investigador)
+    Z -> R : continuar → procesar(solicitud)
+    activate R
+    R -> R : repositorio.guardar(solicitud)
+    R --> Z : RespuestaRadicacion(200, id)
+    deactivate R
+    Z --> N : respuesta 200
+    N --> A : respuesta 200
+  end
+  deactivate Z
+end
+deactivate N
+A -> L : registrar(solicitud, respuesta)
+L --> A : Registro (sin token)
+A --> C : respuesta 401 / 403 / 200
+deactivate A
+note over A : Auditoría trabaja al retornar el sucesor
+note over C : validar título ocurre antes; datos inválidos → 400, sin cadena
+@enduml

@@ -1,0 +1,110 @@
+@startuml
+title RF03 · clases reales (getters, constructores y records anidados abreviados)
+skinparam classAttributeIconSize 0
+hide empty members
+class ClienteRadicacion {
+  - cabeza: ManejadorSeguridad
+  - auditoria: RegistroAuditoriaEnMemoria
+  - repositorio: RepositorioPropuestasEnMemoria
+  + ejecutar(token, titulo): Ejecucion
+}
+abstract class ManejadorSeguridad {
+  # siguiente: ManejadorSeguridad [0..1]
+  + procesar(solicitud): RespuestaRadicacion {abstract}
+  # continuar(solicitud): RespuestaRadicacion
+  # marcarNoEjecutados(solicitud, codigo): void
+}
+class ConfiguracionCadena {
+  + cliente(repositorio, auditoria): ClienteRadicacion
+  + repositorio(): RepositorioPropuestasEnMemoria
+  + auditoria(): RegistroAuditoriaEnMemoria
+}
+class AuditoriaMiddleware {
+  - registro: RegistroAuditoriaEnMemoria
+  + procesar(solicitud): RespuestaRadicacion
+}
+class AutenticacionMiddleware {
+  - validador: ValidadorTokenSimulado
+  + procesar(solicitud): RespuestaRadicacion
+}
+class AutorizacionMiddleware {
+  - politica: PoliticaPermisosSimulada
+  + procesar(solicitud): RespuestaRadicacion
+}
+class RadicarPropuestaHandler {
+  - repositorio: RepositorioPropuestasEnMemoria
+  + procesar(solicitud): RespuestaRadicacion
+}
+class RegistroAuditoriaEnMemoria {
+  - registros: CopyOnWriteArrayList<Registro>
+  + registrar(solicitud, respuesta): Registro
+  + listar(): List<Registro>
+}
+class ValidadorTokenSimulado {
+  - identidades: Map<String, IdentidadSimulada>
+  + validar(token): Optional<IdentidadSimulada>
+}
+class PoliticaPermisosSimulada {
+  + puedeRadicar(identidad): boolean
+}
+class RepositorioPropuestasEnMemoria {
+  - propuestas: ConcurrentHashMap<String, Propuesta>
+  - secuencia: AtomicInteger
+  + guardar(solicitud): String
+  + listar(): List<Propuesta>
+}
+class SolicitudRadicacion {
+  - id: String · UUID
+  - token: String (no serializado)
+  - titulo: String
+  - identidad: IdentidadSimulada
+  - traza: List<EventoTraza>
+  + autenticar(identidad): void
+  + evento(...): void
+  + traza(): List<EventoTraza>
+  + id(), token(), titulo(), identidad()
+}
+class RespuestaRadicacion {
+  - codigo: int
+  - mensaje: String
+  - propuestaId: String [0..1]
+}
+class EventoTraza {
+  - paso: int; manejador, metodo: String
+  - estado, direccion, accion, motivo: String
+  - identidad, titulo: String; codigo: Integer
+  - archivo, fragmento, explicacion: String
+}
+class IdentidadSimulada {
+  - usuario: String
+  - perfil: Perfil (INVESTIGADOR | EVALUADOR)
+}
+class RadicacionController {
+  - cliente: ClienteRadicacion
+  - repositorio: RepositorioPropuestasEnMemoria
+  - auditoria: RegistroAuditoriaEnMemoria
+  + radicar(Entrada): ResponseEntity<Ejecucion>
+  + propuestas(), auditoria(), jsonInvalido()
+}
+class FragmentosFuente {
+  + leer(clase, clave): String {static}
+}
+ClienteRadicacion --> ManejadorSeguridad : cabeza
+ManejadorSeguridad --> ManejadorSeguridad : siguiente [0..1]
+ConfiguracionCadena ..> ClienteRadicacion : construye
+ConfiguracionCadena ..> AuditoriaMiddleware : cabeza
+RadicacionController --> ClienteRadicacion : invoca
+SolicitudRadicacion *-- EventoTraza : traza
+SolicitudRadicacion --> IdentidadSimulada : identidad
+SolicitudRadicacion ..> FragmentosFuente : extrae fragmentos
+ClienteRadicacion ..> SolicitudRadicacion : crea
+ManejadorSeguridad ..> RespuestaRadicacion : retorna
+AuditoriaMiddleware --|> ManejadorSeguridad : hereda
+AutenticacionMiddleware --|> ManejadorSeguridad : hereda
+AutorizacionMiddleware --|> ManejadorSeguridad : hereda
+RadicarPropuestaHandler --|> ManejadorSeguridad : hereda
+AuditoriaMiddleware --> RegistroAuditoriaEnMemoria : usa
+AutenticacionMiddleware --> ValidadorTokenSimulado : usa
+AutorizacionMiddleware --> PoliticaPermisosSimulada : usa
+RadicarPropuestaHandler --> RepositorioPropuestasEnMemoria : usa
+@enduml
