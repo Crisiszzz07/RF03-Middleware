@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", "module": "ES2022", "lib": ["DOM", "ES2022"],
+    "strict": true, "noEmitOnError": true, "removeComments": false
+  },
+  "files": ["src/main/resources/static/app.ts"]
+}
