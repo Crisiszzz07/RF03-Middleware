@@ -31,8 +31,6 @@ La primera compilación descarga Maven 3.9.11 y las dependencias desde Maven Cen
 
 Puerto ocupado: `java -jar target/rf03-chain-1.0.0.jar --server.port=8081`, y abra http://localhost:8081. Si el Wrapper pierde el permiso de ejecución al extraer en Linux/macOS, use el comando `chmod` anterior. En Windows se necesita PowerShell para la descarga inicial del Wrapper.
 
-**Estado de verificación de esta entrega:** TypeScript compiló y las comprobaciones estáticas pasaron. Este entorno no dispone de Java/Maven, no permite descargar dependencias ni abrir sockets, y bloquea el arranque de Chromium. Por ello las pruebas JUnit, la compilación Java, el servidor, los escenarios en navegador y la revisión visual móvil están **pendientes**; no se incluye un JAR sin compilar. Consulte [docs/VERIFICACION.md](docs/VERIFICACION.md). `clean verify` compila, prueba y genera el JAR en un entorno con JDK y acceso inicial a Maven Central.
-
 ## Los tres escenarios
 ![img_4.png](img_4.png)
 
