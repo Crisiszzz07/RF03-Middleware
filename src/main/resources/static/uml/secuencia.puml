@@ -1,44 +1,52 @@
 @startuml
-title RF03 · radicar una propuesta (datos válidos)
+title RF03 · retorno normal 401 / 403 / 200
+hide footbox
 participant ClienteRadicacion as C
 participant AuditoriaMiddleware as A
 participant AutenticacionMiddleware as N
+participant ValidadorTokenSimulado as V
+participant SolicitudRadicacion as Q
 participant AutorizacionMiddleware as Z
+participant PoliticaPermisosSimulada as P
 participant RadicarPropuestaHandler as R
+participant RepositorioPropuestasEnMemoria as D
 participant RegistroAuditoriaEnMemoria as L
+note over C,L
+Escenarios con título válido. Se omite la instrumentación de la traza. Auditoría
+registra respuestas normales 401, 403 y 200; este diagrama no representa excepciones
+inesperadas.
+end note
 C -> A : procesar(solicitud)
-activate A
-A -> N : continuar → procesar(solicitud)
-activate N
-N -> N : validador.validar(token)
-alt token inválido
+A -> N : procesar(solicitud)
+N -> V : validar(solicitud.token())
+V --> N : Optional<IdentidadSimulada>
+alt identidad ausente · token inválido → 401
   N --> A : RespuestaRadicacion(401)
-  note over Z,R : No ejecutados: no se llama a procesar
-else token válido
-  N -> N : solicitud.autenticar(identidad)
-  N -> Z : continuar → procesar(solicitud)
-  activate Z
-  Z -> Z : politica.puedeRadicar(solicitud.identidad())
-  alt sin permiso (evaluador)
+  note over Z,R : AutorizacionMiddleware y RadicarPropuestaHandler no se invocan.
+else identidad presente · token válido
+  N -> Q : autenticar(identidad)
+  Q --> N : void
+  N -> Z : procesar(solicitud)
+  Z -> P : puedeRadicar(solicitud.identidad())
+  P --> Z : permiso: boolean
+  alt sin permiso · evaluador → 403
     Z --> N : RespuestaRadicacion(403)
-    note over R : No ejecutado
     N --> A : respuesta 403
-  else con permiso (investigador)
-    Z -> R : continuar → procesar(solicitud)
-    activate R
-    R -> R : repositorio.guardar(solicitud)
+    note over Z,R : RadicarPropuestaHandler no se invoca.
+  else con permiso · investigador → 200
+    Z -> R : procesar(solicitud)
+    R -> D : guardar(solicitud)
+    D --> R : id: String
     R --> Z : RespuestaRadicacion(200, id)
-    deactivate R
     Z --> N : respuesta 200
     N --> A : respuesta 200
   end
-  deactivate Z
 end
-deactivate N
 A -> L : registrar(solicitud, respuesta)
 L --> A : Registro (sin token)
 A --> C : respuesta 401 / 403 / 200
-deactivate A
-note over A : Auditoría trabaja al retornar el sucesor
-note over C : validar título ocurre antes; datos inválidos → 400, sin cadena
+note over C,L
+Las llamadas entre manejadores se realizan mediante continuar(solicitud).
+Getters simples y constructores omitidos. El título se valida antes de la cadena: 400 no entra aquí.
+end note
 @enduml

@@ -1,68 +1,67 @@
 @startuml
-title RF03 · clases reales (getters, constructores y records anidados abreviados)
+title RF03 · clases reales
 skinparam classAttributeIconSize 0
 hide empty members
 class ClienteRadicacion {
-  - cabeza: ManejadorSeguridad
-  - auditoria: RegistroAuditoriaEnMemoria
-  - repositorio: RepositorioPropuestasEnMemoria
-  + ejecutar(token, titulo): Ejecucion
+  - cabeza: ManejadorSeguridad [1] {readOnly}
+  - auditoria: RegistroAuditoriaEnMemoria [1] {readOnly}
+  - repositorio: RepositorioPropuestasEnMemoria [1] {readOnly}
+  + ejecutar(token: String, titulo: String): Ejecucion
 }
 abstract class ManejadorSeguridad {
-  # siguiente: ManejadorSeguridad [0..1]
-  + procesar(solicitud): RespuestaRadicacion {abstract}
-  # continuar(solicitud): RespuestaRadicacion
-  # marcarNoEjecutados(solicitud, codigo): void
+  # siguiente: ManejadorSeguridad [0..1] {readOnly}
+  {abstract} + procesar(solicitud: SolicitudRadicacion): RespuestaRadicacion
+  # continuar(solicitud: SolicitudRadicacion): RespuestaRadicacion
+  # marcarNoEjecutados(solicitud: SolicitudRadicacion, codigo: int): void
 }
 class ConfiguracionCadena {
-  + cliente(repositorio, auditoria): ClienteRadicacion
+  + cliente(repositorio: RepositorioPropuestasEnMemoria, auditoria: RegistroAuditoriaEnMemoria): ClienteRadicacion
   + repositorio(): RepositorioPropuestasEnMemoria
   + auditoria(): RegistroAuditoriaEnMemoria
 }
 class AuditoriaMiddleware {
-  - registro: RegistroAuditoriaEnMemoria
-  + procesar(solicitud): RespuestaRadicacion
+  - registro: RegistroAuditoriaEnMemoria [1] {readOnly}
+  + procesar(solicitud: SolicitudRadicacion): RespuestaRadicacion
 }
 class AutenticacionMiddleware {
-  - validador: ValidadorTokenSimulado
-  + procesar(solicitud): RespuestaRadicacion
+  - validador: ValidadorTokenSimulado [1] {readOnly}
+  + procesar(solicitud: SolicitudRadicacion): RespuestaRadicacion
 }
 class AutorizacionMiddleware {
-  - politica: PoliticaPermisosSimulada
-  + procesar(solicitud): RespuestaRadicacion
+  - politica: PoliticaPermisosSimulada [1] {readOnly}
+  + procesar(solicitud: SolicitudRadicacion): RespuestaRadicacion
 }
 class RadicarPropuestaHandler {
-  - repositorio: RepositorioPropuestasEnMemoria
-  + procesar(solicitud): RespuestaRadicacion
+  - repositorio: RepositorioPropuestasEnMemoria [1] {readOnly}
+  + procesar(solicitud: SolicitudRadicacion): RespuestaRadicacion
 }
 class RegistroAuditoriaEnMemoria {
   - registros: CopyOnWriteArrayList<Registro>
-  + registrar(solicitud, respuesta): Registro
+  + registrar(solicitud: SolicitudRadicacion, respuesta: RespuestaRadicacion): Registro
   + listar(): List<Registro>
 }
 class ValidadorTokenSimulado {
   - identidades: Map<String, IdentidadSimulada>
-  + validar(token): Optional<IdentidadSimulada>
+  + validar(token: String): Optional<IdentidadSimulada>
 }
 class PoliticaPermisosSimulada {
-  + puedeRadicar(identidad): boolean
+  + puedeRadicar(identidad: IdentidadSimulada): boolean
 }
 class RepositorioPropuestasEnMemoria {
   - propuestas: ConcurrentHashMap<String, Propuesta>
   - secuencia: AtomicInteger
-  + guardar(solicitud): String
+  + guardar(solicitud: SolicitudRadicacion): String
   + listar(): List<Propuesta>
 }
 class SolicitudRadicacion {
-  - id: String · UUID
+  - id: String
   - token: String (no serializado)
   - titulo: String
-  - identidad: IdentidadSimulada
+  - identidad: IdentidadSimulada [0..1]
   - traza: List<EventoTraza>
-  + autenticar(identidad): void
+  + autenticar(identidad: IdentidadSimulada): void
   + evento(...): void
   + traza(): List<EventoTraza>
-  + id(), token(), titulo(), identidad()
 }
 class RespuestaRadicacion {
   - codigo: int
@@ -80,31 +79,28 @@ class IdentidadSimulada {
   - perfil: Perfil (INVESTIGADOR | EVALUADOR)
 }
 class RadicacionController {
-  - cliente: ClienteRadicacion
-  - repositorio: RepositorioPropuestasEnMemoria
-  - auditoria: RegistroAuditoriaEnMemoria
-  + radicar(Entrada): ResponseEntity<Ejecucion>
+  - cliente: ClienteRadicacion [1] {readOnly}
+  - repositorio: RepositorioPropuestasEnMemoria [1] {readOnly}
+  - auditoria: RegistroAuditoriaEnMemoria [1] {readOnly}
+  + radicar(entrada: Entrada): ResponseEntity<Ejecucion>
   + propuestas(), auditoria(), jsonInvalido()
 }
 class FragmentosFuente {
-  + leer(clase, clave): String {static}
+  {static} + leer(clase: String, clave: String): String
 }
-ClienteRadicacion --> ManejadorSeguridad : cabeza
-ManejadorSeguridad --> ManejadorSeguridad : siguiente [0..1]
+AuditoriaMiddleware --|> ManejadorSeguridad
+AutenticacionMiddleware --|> ManejadorSeguridad
+AutorizacionMiddleware --|> ManejadorSeguridad
+RadicarPropuestaHandler --|> ManejadorSeguridad
 ConfiguracionCadena ..> ClienteRadicacion : construye
-ConfiguracionCadena ..> AuditoriaMiddleware : cabeza
-RadicacionController --> ClienteRadicacion : invoca
-SolicitudRadicacion *-- EventoTraza : traza
-SolicitudRadicacion --> IdentidadSimulada : identidad
-SolicitudRadicacion ..> FragmentosFuente : extrae fragmentos
-ClienteRadicacion ..> SolicitudRadicacion : crea
-ManejadorSeguridad ..> RespuestaRadicacion : retorna
-AuditoriaMiddleware --|> ManejadorSeguridad : hereda
-AutenticacionMiddleware --|> ManejadorSeguridad : hereda
-AutorizacionMiddleware --|> ManejadorSeguridad : hereda
-RadicarPropuestaHandler --|> ManejadorSeguridad : hereda
-AuditoriaMiddleware --> RegistroAuditoriaEnMemoria : usa
-AutenticacionMiddleware --> ValidadorTokenSimulado : usa
-AutorizacionMiddleware --> PoliticaPermisosSimulada : usa
-RadicarPropuestaHandler --> RepositorioPropuestasEnMemoria : usa
+ConfiguracionCadena ..> ManejadorSeguridad : compone la cadena
+note bottom of ManejadorSeguridad
+Referencias mostradas solo como atributos; sin asociaciones duplicadas.
+El sucesor se fija mediante el constructor; no hay setters.
+RadicarPropuestaHandler es terminal: siguiente = null.
+end note
+legend bottom
+Constructores, getters y records anidados abreviados.
+Servicios y almacenamiento simulados; no son seguridad de producción.
+endlegend
 @enduml

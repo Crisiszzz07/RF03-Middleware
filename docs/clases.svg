@@ -1,132 +1,212 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1460 1525" role="img" aria-labelledby="title desc">
-<title id="title">RF03: diagrama UML de clases</title><desc id="desc">Las flechas triangulares vacías denotan herencia. ManejadorSeguridad referencia siguiente. Los filtros usan servicios simulados.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1460 1810" role="img" aria-labelledby="title desc">
+<title id="title">RF03: UML de clases</title><desc id="desc">Referencias con visibilidad, multiplicidad y readOnly. Cuatro subclases del Handler abstracto; servicios simulados.</desc>
 <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#66418b" stroke-width="1.5"/></marker><marker id="inherit" markerWidth="16" markerHeight="14" refX="14" refY="7" orient="auto"><path d="M1 1 L14 7 L1 13 Z" fill="white" stroke="#66418b" stroke-width="1.5"/></marker></defs>
-<rect width="1460" height="1525" fill="#faf8fe"/>
-<style>text{font-family:system-ui,Segoe UI,sans-serif;fill:#30213f} .title{font-size:19px;font-weight:700}.member{font-size:14px}.role{font-size:13px;fill:#6b4b88}.edge{fill:none;stroke:#66418b;stroke-width:2}</style>
-<text x="35" y="38" class="title">RF03 · UML de clases</text>
-<path d="M425 155 H505" class="edge" marker-end="url(#arrow)"/>
-<text x="440" y="140" class="role">cabeza</text>
-<path d="M790 75 V52 H958 V125 H940" class="edge" marker-end="url(#arrow)"/>
-<text x="975" y="60" class="role">siguiente 0..1</text>
-<path d="M1000 230 V290 H405 V240" class="edge" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
-<text x="790" y="280" class="role">construye y ordena la cadena</text>
-<path d="M195.0 350 V320 H195.0 V305 H722 V265" class="edge" marker-end="url(#inherit)"/>
-<path d="M195.0 492 V610" class="edge" marker-end="url(#arrow)"/>
-<text x="205.0" y="570" class="role">usa</text>
-<path d="M547.5 350 V320 H547.5 V305 H722 V265" class="edge" marker-end="url(#inherit)"/>
-<path d="M547.5 492 V610" class="edge" marker-end="url(#arrow)"/>
-<text x="557.5" y="570" class="role">usa</text>
-<path d="M905.0 350 V320 H905.0 V305 H722 V265" class="edge" marker-end="url(#inherit)"/>
-<path d="M905.0 492 V610" class="edge" marker-end="url(#arrow)"/>
-<text x="915.0" y="570" class="role">usa</text>
-<path d="M1260.0 350 V320 H1260.0 V305 H722 V265" class="edge" marker-end="url(#inherit)"/>
-<path d="M1260.0 517 V610" class="edge" marker-end="url(#arrow)"/>
-<text x="1270.0" y="570" class="role">usa</text>
-<text x="35" y="875" class="title">Datos y apoyo · dependencias descritas en las fuentes PlantUML</text>
-<path d="M475 1070 H498 V1190 H520" class="edge" marker-end="url(#arrow)"/>
-<text x="480" y="1150" class="role">identidad</text>
-<path d="M475 965 H493 V840 H955 V965 H975" class="edge" marker-end="url(#arrow)"/>
-<text x="635" y="830" class="role">SolicitudRadicacion contiene traza: List&lt;EventoTraza&gt;</text>
-<g><rect x="35" y="75" width="390" height="192" rx="6" fill="white" stroke="#b9a6cd"/><rect x="35" y="75" width="390" height="70" rx="6" fill="#eee5fa"/><text x="47" y="101" class="title">ClienteRadicacion</text><text x="47" y="125" class="role">Client</text>
-<text x="47" y="166" class="member">- cabeza: ManejadorSeguridad</text>
-<text x="47" y="191" class="member">- auditoria: RegistroAuditoriaEnMemoria</text>
-<text x="47" y="216" class="member">- repositorio: RepositorioPropuestasEnMemoria</text>
-<path d="M35 227 H425" stroke="#ded4e8"/>
-<text x="47" y="241" class="member">+ ejecutar(token, titulo): Ejecucion</text>
+<rect width="1460" height="1810" fill="#faf8fe"/>
+<style>text{font-family:system-ui,Segoe UI,sans-serif;fill:#30213f}.title{font-size:21px;font-weight:700}.member{font-size:14px}.role{font-size:13px;fill:#6b4b88}.edge{fill:none;stroke:#66418b;stroke-width:2}</style>
+<text x="35" y="38" class="title" >RF03 · UML de clases</text>
+<text x="35" y="65" class="role" >Referencias solo como atributos: visibilidad, multiplicidad y {readOnly}. Sin asociaciones duplicadas.</text>
+<path data-subclass="AuditoriaMiddleware" d="M195.0 450 V410 H722 V350" class="edge" marker-end="url(#inherit)"/>
+<path data-subclass="AutenticacionMiddleware" d="M547.5 450 V410 H722 V350" class="edge" marker-end="url(#inherit)"/>
+<path data-subclass="AutorizacionMiddleware" d="M905.0 450 V410 H722 V350" class="edge" marker-end="url(#inherit)"/>
+<path data-subclass="RadicarPropuestaHandler" d="M1260.0 450 V410 H722 V350" class="edge" marker-end="url(#inherit)"/>
+<path d="M1000 275 H965 V320 H940" class="edge" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+<text x="1030" y="405" class="role" >Construye y compone la cadena</text>
+<text x="35" y="695" class="title" >Servicios referenciados por los manejadores · todos simulados</text>
+<text x="35" y="1060" class="title" >Contexto, respuesta y apoyo · tipos reales del proyecto</text>
+<g data-class="ClienteRadicacion">
+<rect x="35" y="90" width="390" height="260" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="35" y="90" width="390" height="70" rx="6" fill="#eee5fa"/>
+<text x="47" y="117" class="title" style="font-size:19px">ClienteRadicacion</text>
+<text x="47" y="140" class="role" >Client</text>
+<text x="47" y="182" class="member" >- cabeza: ManejadorSeguridad [1] {readOnly}</text>
+<text x="47" y="206" class="member" >- auditoria: RegistroAuditoriaEnMemoria [1]</text>
+<text x="47" y="230" class="member" >{readOnly}</text>
+<text x="47" y="254" class="member" >- repositorio: RepositorioPropuestasEnMemoria [1]</text>
+<text x="47" y="278" class="member" >{readOnly}</text>
+<path d="M35 290 H425" stroke="#ded4e8"/>
+<text x="47" y="302" class="member" >+ ejecutar(token: String, titulo: String):</text>
+<text x="47" y="326" class="member" >Ejecucion</text>
 </g>
-<g><rect x="505" y="75" width="435" height="192" rx="6" fill="white" stroke="#b9a6cd"/><rect x="505" y="75" width="435" height="70" rx="6" fill="#eee5fa"/><text x="517" y="101" class="title" font-style="italic">ManejadorSeguridad</text><text x="517" y="125" class="role">abstract · Handler</text>
-<text x="517" y="166" class="member"># siguiente: ManejadorSeguridad [0..1]</text>
-<path d="M505 177 H940" stroke="#ded4e8"/>
-<text x="517" y="191" class="member">+ procesar(solicitud): RespuestaRadicacion {abstract}</text>
-<text x="517" y="216" class="member"># continuar(solicitud): RespuestaRadicacion</text>
-<text x="517" y="241" class="member"># marcarNoEjecutados(solicitud, codigo): void</text>
+<g data-class="ManejadorSeguridad">
+<rect x="505" y="90" width="435" height="260" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="505" y="90" width="435" height="70" rx="6" fill="#eee5fa"/>
+<text x="517" y="117" class="title" style="font-size:19px" font-style="italic">ManejadorSeguridad</text>
+<text x="517" y="140" class="role" >abstract · Handler</text>
+<text x="517" y="182" class="member" ># siguiente: ManejadorSeguridad [0..1] {readOnly}</text>
+<path d="M505 194 H940" stroke="#ded4e8"/>
+<text x="517" y="206" class="member" >{abstract} + procesar(solicitud: SolicitudRadicacion):</text>
+<text x="517" y="230" class="member" >RespuestaRadicacion</text>
+<text x="517" y="254" class="member" ># continuar(solicitud: SolicitudRadicacion):</text>
+<text x="517" y="278" class="member" >RespuestaRadicacion</text>
+<text x="517" y="302" class="member" ># marcarNoEjecutados(solicitud: SolicitudRadicacion,</text>
+<text x="517" y="326" class="member" >codigo: int): void</text>
 </g>
-<g><rect x="1000" y="75" width="405" height="167" rx="6" fill="white" stroke="#b9a6cd"/><rect x="1000" y="75" width="405" height="70" rx="6" fill="#eee5fa"/><text x="1012" y="101" class="title">ConfiguracionCadena</text><text x="1012" y="125" class="role">Composición Spring</text>
-<text x="1012" y="166" class="member">+ cliente(repositorio, auditoria): ClienteRadicacion</text>
-<text x="1012" y="191" class="member">+ repositorio(): RepositorioPropuestasEnMemoria</text>
-<text x="1012" y="216" class="member">+ auditoria(): RegistroAuditoriaEnMemoria</text>
+<g data-class="ConfiguracionCadena">
+<rect x="1000" y="90" width="405" height="212" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="1000" y="90" width="405" height="70" rx="6" fill="#eee5fa"/>
+<text x="1012" y="117" class="title" style="font-size:19px">ConfiguracionCadena</text>
+<text x="1012" y="140" class="role" >Composición Spring</text>
+<text x="1012" y="182" class="member" >+ cliente(repositorio:</text>
+<text x="1012" y="206" class="member" >RepositorioPropuestasEnMemoria, auditoria:</text>
+<text x="1012" y="230" class="member" >RegistroAuditoriaEnMemoria): ClienteRadicacion</text>
+<text x="1012" y="254" class="member" >+ repositorio(): RepositorioPropuestasEnMemoria</text>
+<text x="1012" y="278" class="member" >+ auditoria(): RegistroAuditoriaEnMemoria</text>
 </g>
-<g><rect x="35" y="350" width="320" height="142" rx="6" fill="white" stroke="#b9a6cd"/><rect x="35" y="350" width="320" height="70" rx="6" fill="#eee5fa"/><text x="47" y="376" class="title">AuditoriaMiddleware</text><text x="47" y="400" class="role">ConcreteHandler</text>
-<text x="47" y="441" class="member">- registro: RegistroAuditoriaEnMemoria</text>
-<path d="M35 452 H355" stroke="#ded4e8"/>
-<text x="47" y="466" class="member">+ procesar(solicitud): RespuestaRadicacion</text>
+<g data-class="AuditoriaMiddleware">
+<rect x="35" y="450" width="320" height="212" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="35" y="450" width="320" height="70" rx="6" fill="#eee5fa"/>
+<text x="47" y="477" class="title" style="font-size:19px">AuditoriaMiddleware</text>
+<text x="47" y="500" class="role" >ConcreteHandler</text>
+<text x="47" y="542" class="member" >- registro: RegistroAuditoriaEnMemoria</text>
+<text x="47" y="566" class="member" >[1] {readOnly}</text>
+<path d="M35 578 H355" stroke="#ded4e8"/>
+<text x="47" y="590" class="member" >+ procesar(solicitud:</text>
+<text x="47" y="614" class="member" >SolicitudRadicacion):</text>
+<text x="47" y="638" class="member" >RespuestaRadicacion</text>
 </g>
-<g><rect x="385" y="350" width="325" height="142" rx="6" fill="white" stroke="#b9a6cd"/><rect x="385" y="350" width="325" height="70" rx="6" fill="#eee5fa"/><text x="397" y="376" class="title">AutenticacionMiddleware</text><text x="397" y="400" class="role">ConcreteHandler</text>
-<text x="397" y="441" class="member">- validador: ValidadorTokenSimulado</text>
-<path d="M385 452 H710" stroke="#ded4e8"/>
-<text x="397" y="466" class="member">+ procesar(solicitud): RespuestaRadicacion</text>
+<g data-class="AutenticacionMiddleware">
+<rect x="385" y="450" width="325" height="188" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="385" y="450" width="325" height="70" rx="6" fill="#eee5fa"/>
+<text x="397" y="477" class="title" style="font-size:19px">AutenticacionMiddleware</text>
+<text x="397" y="500" class="role" >ConcreteHandler</text>
+<text x="397" y="542" class="member" >- validador: ValidadorTokenSimulado [1]</text>
+<text x="397" y="566" class="member" >{readOnly}</text>
+<path d="M385 578 H710" stroke="#ded4e8"/>
+<text x="397" y="590" class="member" >+ procesar(solicitud:</text>
+<text x="397" y="614" class="member" >SolicitudRadicacion): RespuestaRadicacion</text>
 </g>
-<g><rect x="740" y="350" width="330" height="142" rx="6" fill="white" stroke="#b9a6cd"/><rect x="740" y="350" width="330" height="70" rx="6" fill="#eee5fa"/><text x="752" y="376" class="title">AutorizacionMiddleware</text><text x="752" y="400" class="role">ConcreteHandler</text>
-<text x="752" y="441" class="member">- politica: PoliticaPermisosSimulada</text>
-<path d="M740 452 H1070" stroke="#ded4e8"/>
-<text x="752" y="466" class="member">+ procesar(solicitud): RespuestaRadicacion</text>
+<g data-class="AutorizacionMiddleware">
+<rect x="740" y="450" width="330" height="188" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="740" y="450" width="330" height="70" rx="6" fill="#eee5fa"/>
+<text x="752" y="477" class="title" style="font-size:19px">AutorizacionMiddleware</text>
+<text x="752" y="500" class="role" >ConcreteHandler</text>
+<text x="752" y="542" class="member" >- politica: PoliticaPermisosSimulada [1]</text>
+<text x="752" y="566" class="member" >{readOnly}</text>
+<path d="M740 578 H1070" stroke="#ded4e8"/>
+<text x="752" y="590" class="member" >+ procesar(solicitud:</text>
+<text x="752" y="614" class="member" >SolicitudRadicacion): RespuestaRadicacion</text>
 </g>
-<g><rect x="1100" y="350" width="320" height="167" rx="6" fill="white" stroke="#b9a6cd"/><rect x="1100" y="350" width="320" height="70" rx="6" fill="#eee5fa"/><text x="1112" y="376" class="title">RadicarPropuestaHandler</text><text x="1112" y="400" class="role">ConcreteHandler · terminal</text>
-<text x="1112" y="441" class="member">- repositorio:</text>
-<text x="1112" y="466" class="member">RepositorioPropuestasEnMemoria</text>
-<path d="M1100 477 H1420" stroke="#ded4e8"/>
-<text x="1112" y="491" class="member">+ procesar(solicitud): RespuestaRadicacion</text>
+<g data-class="RadicarPropuestaHandler">
+<rect x="1100" y="450" width="320" height="236" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="1100" y="450" width="320" height="70" rx="6" fill="#eee5fa"/>
+<text x="1112" y="477" class="title" style="font-size:19px">RadicarPropuestaHandler</text>
+<text x="1112" y="500" class="role" >ConcreteHandler · terminal</text>
+<text x="1112" y="542" class="member" >- repositorio:</text>
+<text x="1112" y="566" class="member" >RepositorioPropuestasEnMemoria [1]</text>
+<text x="1112" y="590" class="member" >{readOnly}</text>
+<path d="M1100 602 H1420" stroke="#ded4e8"/>
+<text x="1112" y="614" class="member" >+ procesar(solicitud:</text>
+<text x="1112" y="638" class="member" >SolicitudRadicacion):</text>
+<text x="1112" y="662" class="member" >RespuestaRadicacion</text>
 </g>
-<g><rect x="35" y="610" width="320" height="167" rx="6" fill="white" stroke="#b9a6cd"/><rect x="35" y="610" width="320" height="70" rx="6" fill="#eee5fa"/><text x="47" y="636" class="title" style="font-size:16px">RegistroAuditoriaEnMemoria</text><text x="47" y="660" class="role">Servicio simulado</text>
-<text x="47" y="701" class="member">- registros: CopyOnWriteArrayList&lt;Registro&gt;</text>
-<path d="M35 712 H355" stroke="#ded4e8"/>
-<text x="47" y="726" class="member">+ registrar(solicitud, respuesta): Registro</text>
-<text x="47" y="751" class="member">+ listar(): List&lt;Registro&gt;</text>
+<g data-class="RegistroAuditoriaEnMemoria">
+<rect x="35" y="720" width="320" height="236" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="35" y="720" width="320" height="70" rx="6" fill="#eee5fa"/>
+<text x="47" y="747" class="title" style="font-size:16px">RegistroAuditoriaEnMemoria</text>
+<text x="47" y="770" class="role" >Servicio simulado</text>
+<text x="47" y="812" class="member" >- registros:</text>
+<text x="47" y="836" class="member" >CopyOnWriteArrayList&lt;Registro&gt;</text>
+<path d="M35 848 H355" stroke="#ded4e8"/>
+<text x="47" y="860" class="member" >+ registrar(solicitud:</text>
+<text x="47" y="884" class="member" >SolicitudRadicacion, respuesta:</text>
+<text x="47" y="908" class="member" >RespuestaRadicacion): Registro</text>
+<text x="47" y="932" class="member" >+ listar(): List&lt;Registro&gt;</text>
 </g>
-<g><rect x="385" y="610" width="325" height="192" rx="6" fill="white" stroke="#b9a6cd"/><rect x="385" y="610" width="325" height="70" rx="6" fill="#eee5fa"/><text x="397" y="636" class="title">ValidadorTokenSimulado</text><text x="397" y="660" class="role">Servicio simulado</text>
-<text x="397" y="701" class="member">- identidades: Map&lt;String,</text>
-<text x="397" y="726" class="member">IdentidadSimulada&gt;</text>
-<path d="M385 737 H710" stroke="#ded4e8"/>
-<text x="397" y="751" class="member">+ validar(token):</text>
-<text x="397" y="776" class="member">Optional&lt;IdentidadSimulada&gt;</text>
+<g data-class="ValidadorTokenSimulado">
+<rect x="385" y="720" width="325" height="188" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="385" y="720" width="325" height="70" rx="6" fill="#eee5fa"/>
+<text x="397" y="747" class="title" style="font-size:19px">ValidadorTokenSimulado</text>
+<text x="397" y="770" class="role" >Servicio simulado</text>
+<text x="397" y="812" class="member" >- identidades: Map&lt;String,</text>
+<text x="397" y="836" class="member" >IdentidadSimulada&gt;</text>
+<path d="M385 848 H710" stroke="#ded4e8"/>
+<text x="397" y="860" class="member" >+ validar(token: String):</text>
+<text x="397" y="884" class="member" >Optional&lt;IdentidadSimulada&gt;</text>
 </g>
-<g><rect x="740" y="610" width="330" height="117" rx="6" fill="white" stroke="#b9a6cd"/><rect x="740" y="610" width="330" height="70" rx="6" fill="#eee5fa"/><text x="752" y="636" class="title">PoliticaPermisosSimulada</text><text x="752" y="660" class="role">Servicio simulado</text>
-<text x="752" y="701" class="member">+ puedeRadicar(identidad): boolean</text>
+<g data-class="PoliticaPermisosSimulada">
+<rect x="740" y="720" width="330" height="140" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="740" y="720" width="330" height="70" rx="6" fill="#eee5fa"/>
+<text x="752" y="747" class="title" style="font-size:19px">PoliticaPermisosSimulada</text>
+<text x="752" y="770" class="role" >Servicio simulado</text>
+<text x="752" y="812" class="member" >+ puedeRadicar(identidad:</text>
+<text x="752" y="836" class="member" >IdentidadSimulada): boolean</text>
 </g>
-<g><rect x="1100" y="610" width="320" height="217" rx="6" fill="white" stroke="#b9a6cd"/><rect x="1100" y="610" width="320" height="70" rx="6" fill="#eee5fa"/><text x="1112" y="636" class="title" style="font-size:16px">RepositorioPropuestasEnMemoria</text><text x="1112" y="660" class="role">Servicio simulado</text>
-<text x="1112" y="701" class="member">- propuestas: ConcurrentHashMap&lt;String,</text>
-<text x="1112" y="726" class="member">Propuesta&gt;</text>
-<text x="1112" y="751" class="member">- secuencia: AtomicInteger</text>
-<path d="M1100 762 H1420" stroke="#ded4e8"/>
-<text x="1112" y="776" class="member">+ guardar(solicitud): String</text>
-<text x="1112" y="801" class="member">+ listar(): List&lt;Propuesta&gt;</text>
+<g data-class="RepositorioPropuestasEnMemoria">
+<rect x="1100" y="720" width="320" height="236" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="1100" y="720" width="320" height="70" rx="6" fill="#eee5fa"/>
+<text x="1112" y="747" class="title" style="font-size:16px">RepositorioPropuestasEnMemoria</text>
+<text x="1112" y="770" class="role" >Almacenamiento en memoria</text>
+<text x="1112" y="812" class="member" >- propuestas: ConcurrentHashMap&lt;String,</text>
+<text x="1112" y="836" class="member" >Propuesta&gt;</text>
+<text x="1112" y="860" class="member" >- secuencia: AtomicInteger</text>
+<path d="M1100 872 H1420" stroke="#ded4e8"/>
+<text x="1112" y="884" class="member" >+ guardar(solicitud:</text>
+<text x="1112" y="908" class="member" >SolicitudRadicacion): String</text>
+<text x="1112" y="932" class="member" >+ listar(): List&lt;Propuesta&gt;</text>
 </g>
-<g><rect x="35" y="900" width="440" height="317" rx="6" fill="white" stroke="#b9a6cd"/><rect x="35" y="900" width="440" height="70" rx="6" fill="#eee5fa"/><text x="47" y="926" class="title">SolicitudRadicacion</text><text x="47" y="950" class="role">Contexto por petición</text>
-<text x="47" y="991" class="member">- id: String · UUID</text>
-<text x="47" y="1016" class="member">- token: String (no serializado)</text>
-<text x="47" y="1041" class="member">- titulo: String</text>
-<text x="47" y="1066" class="member">- identidad: IdentidadSimulada</text>
-<text x="47" y="1091" class="member">- traza: List&lt;EventoTraza&gt;</text>
-<path d="M35 1102 H475" stroke="#ded4e8"/>
-<text x="47" y="1116" class="member">+ autenticar(identidad): void</text>
-<text x="47" y="1141" class="member">+ evento(...): void</text>
-<text x="47" y="1166" class="member">+ traza(): List&lt;EventoTraza&gt;</text>
-<text x="47" y="1191" class="member">+ id(), token(), titulo(), identidad()</text>
+<g data-class="SolicitudRadicacion">
+<rect x="35" y="1090" width="440" height="284" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="35" y="1090" width="440" height="70" rx="6" fill="#eee5fa"/>
+<text x="47" y="1117" class="title" style="font-size:19px">SolicitudRadicacion</text>
+<text x="47" y="1140" class="role" >Contexto por petición</text>
+<text x="47" y="1182" class="member" >- id: String</text>
+<text x="47" y="1206" class="member" >- token: String (no serializado)</text>
+<text x="47" y="1230" class="member" >- titulo: String</text>
+<text x="47" y="1254" class="member" >- identidad: IdentidadSimulada [0..1]</text>
+<text x="47" y="1278" class="member" >- traza: List&lt;EventoTraza&gt;</text>
+<path d="M35 1290 H475" stroke="#ded4e8"/>
+<text x="47" y="1302" class="member" >+ autenticar(identidad: IdentidadSimulada): void</text>
+<text x="47" y="1326" class="member" >+ evento(...): void</text>
+<text x="47" y="1350" class="member" >+ traza(): List&lt;EventoTraza&gt;</text>
 </g>
-<g><rect x="520" y="900" width="405" height="167" rx="6" fill="white" stroke="#b9a6cd"/><rect x="520" y="900" width="405" height="70" rx="6" fill="#eee5fa"/><text x="532" y="926" class="title">RespuestaRadicacion</text><text x="532" y="950" class="role">record · resultado</text>
-<text x="532" y="991" class="member">- codigo: int</text>
-<text x="532" y="1016" class="member">- mensaje: String</text>
-<text x="532" y="1041" class="member">- propuestaId: String [0..1]</text>
+<g data-class="RespuestaRadicacion">
+<rect x="520" y="1090" width="405" height="164" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="520" y="1090" width="405" height="70" rx="6" fill="#eee5fa"/>
+<text x="532" y="1117" class="title" style="font-size:19px">RespuestaRadicacion</text>
+<text x="532" y="1140" class="role" >record · resultado</text>
+<text x="532" y="1182" class="member" >- codigo: int</text>
+<text x="532" y="1206" class="member" >- mensaje: String</text>
+<text x="532" y="1230" class="member" >- propuestaId: String [0..1]</text>
 </g>
-<g><rect x="975" y="900" width="445" height="192" rx="6" fill="white" stroke="#b9a6cd"/><rect x="975" y="900" width="445" height="70" rx="6" fill="#eee5fa"/><text x="987" y="926" class="title">EventoTraza</text><text x="987" y="950" class="role">record · instantánea</text>
-<text x="987" y="991" class="member">- paso: int; manejador, metodo: String</text>
-<text x="987" y="1016" class="member">- estado, direccion, accion, motivo: String</text>
-<text x="987" y="1041" class="member">- identidad, titulo: String; codigo: Integer</text>
-<text x="987" y="1066" class="member">- archivo, fragmento, explicacion: String</text>
+<g data-class="EventoTraza">
+<rect x="975" y="1090" width="445" height="188" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="975" y="1090" width="445" height="70" rx="6" fill="#eee5fa"/>
+<text x="987" y="1117" class="title" style="font-size:19px">EventoTraza</text>
+<text x="987" y="1140" class="role" >record · instantánea</text>
+<text x="987" y="1182" class="member" >- paso: int; manejador, metodo: String</text>
+<text x="987" y="1206" class="member" >- estado, direccion, accion, motivo: String</text>
+<text x="987" y="1230" class="member" >- identidad, titulo: String; codigo: Integer</text>
+<text x="987" y="1254" class="member" >- archivo, fragmento, explicacion: String</text>
 </g>
-<g><rect x="520" y="1120" width="405" height="142" rx="6" fill="white" stroke="#b9a6cd"/><rect x="520" y="1120" width="405" height="70" rx="6" fill="#eee5fa"/><text x="532" y="1146" class="title">IdentidadSimulada</text><text x="532" y="1170" class="role">record · perfil del validador</text>
-<text x="532" y="1211" class="member">- usuario: String</text>
-<text x="532" y="1236" class="member">- perfil: Perfil (INVESTIGADOR | EVALUADOR)</text>
+<g data-class="IdentidadSimulada">
+<rect x="520" y="1290" width="405" height="140" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="520" y="1290" width="405" height="70" rx="6" fill="#eee5fa"/>
+<text x="532" y="1317" class="title" style="font-size:19px">IdentidadSimulada</text>
+<text x="532" y="1340" class="role" >record · perfil del validador</text>
+<text x="532" y="1382" class="member" >- usuario: String</text>
+<text x="532" y="1406" class="member" >- perfil: Perfil (INVESTIGADOR | EVALUADOR)</text>
 </g>
-<g><rect x="35" y="1285" width="440" height="217" rx="6" fill="white" stroke="#b9a6cd"/><rect x="35" y="1285" width="440" height="70" rx="6" fill="#eee5fa"/><text x="47" y="1311" class="title">RadicacionController</text><text x="47" y="1335" class="role">Adaptador HTTP externo al patrón</text>
-<text x="47" y="1376" class="member">- cliente: ClienteRadicacion</text>
-<text x="47" y="1401" class="member">- repositorio: RepositorioPropuestasEnMemoria</text>
-<text x="47" y="1426" class="member">- auditoria: RegistroAuditoriaEnMemoria</text>
-<path d="M35 1437 H475" stroke="#ded4e8"/>
-<text x="47" y="1451" class="member">+ radicar(Entrada): ResponseEntity&lt;Ejecucion&gt;</text>
-<text x="47" y="1476" class="member">+ propuestas(), auditoria(), jsonInvalido()</text>
+<g data-class="RadicacionController">
+<rect x="35" y="1430" width="440" height="236" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="35" y="1430" width="440" height="70" rx="6" fill="#eee5fa"/>
+<text x="47" y="1457" class="title" style="font-size:19px">RadicacionController</text>
+<text x="47" y="1480" class="role" >Adaptador HTTP externo al patrón</text>
+<text x="47" y="1522" class="member" >- cliente: ClienteRadicacion [1] {readOnly}</text>
+<text x="47" y="1546" class="member" >- repositorio: RepositorioPropuestasEnMemoria [1]</text>
+<text x="47" y="1570" class="member" >{readOnly}</text>
+<text x="47" y="1594" class="member" >- auditoria: RegistroAuditoriaEnMemoria [1] {readOnly}</text>
+<path d="M35 1606 H475" stroke="#ded4e8"/>
+<text x="47" y="1618" class="member" >+ radicar(entrada: Entrada): ResponseEntity&lt;Ejecucion&gt;</text>
+<text x="47" y="1642" class="member" >+ propuestas(), auditoria(), jsonInvalido()</text>
 </g>
-<g><rect x="975" y="1285" width="445" height="117" rx="6" fill="white" stroke="#b9a6cd"/><rect x="975" y="1285" width="445" height="70" rx="6" fill="#eee5fa"/><text x="987" y="1311" class="title">FragmentosFuente</text><text x="987" y="1335" class="role">Utilidad de documentación</text>
-<text x="987" y="1376" class="member">+ leer(clase, clave): String {static}</text>
+<g data-class="FragmentosFuente">
+<rect x="975" y="1430" width="445" height="116" rx="6" fill="white" stroke="#b9a6cd"/>
+<rect x="975" y="1430" width="445" height="70" rx="6" fill="#eee5fa"/>
+<text x="987" y="1457" class="title" style="font-size:19px">FragmentosFuente</text>
+<text x="987" y="1480" class="role" >Utilidad de documentación</text>
+<text x="987" y="1522" class="member" >{static} + leer(clase: String, clave: String): String</text>
 </g>
-<text x="35" y="1500" class="role">Triángulo vacío = herencia · flecha = referencia/dependencia · constructores y records anidados abreviados</text></svg>
+<text x="35" y="1730" class="role" >Triángulo vacío = herencia; línea discontinua = dependencia. Constructores, getters y records anidados abreviados.</text>
+<text x="35" y="1756" class="role" >El sucesor se fija mediante constructor; no hay setters. Terminal: siguiente = null.</text>
+<text x="35" y="1782" class="role" >Servicios y almacenamiento simulados; no representan seguridad de producción.</text>
+</svg>
