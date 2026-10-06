@@ -27,7 +27,7 @@ class HttpTest {
             assertEquals(registros + i + 1, auditoria.listar().size());
             assertFalse(http.getForObject("/api/auditoria", String.class).contains(tokens[i]));
         }
-        for (String recurso : new String[]{"/", "/app.js", "/styles.css", "/uml/clases.svg", "/uml/secuencia.svg", "/uml/clases.puml", "/codigo/demo/rf03/ManejadorSeguridad.java"}) {
+        for (String recurso : new String[]{"/", "/app.js", "/simulacion.js", "/styles.css", "/uml/clases.svg", "/uml/secuencia.svg", "/uml/clases.puml", "/codigo/demo/rf03/ManejadorSeguridad.java"}) {
             assertEquals(200, http.getForEntity(recurso, String.class).getStatusCode().value(), recurso);
         }
     }

@@ -49,7 +49,9 @@ for res in html.resources:
 for cls in html.handlers:check(cls in fuentes,f'Nodo real {cls}')
 check(html.handlers==['ClienteRadicacion','AuditoriaMiddleware','AutenticacionMiddleware','AutorizacionMiddleware','RadicarPropuestaHandler'],'Orden de presentación')
 ts=(STATIC/'app.ts').read_text()
-for id in re.findall(r"(?:elemento(?:<[^>]+>)?|texto)\('([^']+)'",ts):check(id in html.ids,f'ID TS presente {id}')
+for archivo in ['app.ts','simulacion.ts']:
+ contenido=(STATIC/archivo).read_text()
+ for id in re.findall(r"(?:elemento(?:<[^>]+>)?|nodo(?:<[^>]+>)?|texto)\('([^']+)'(?=\s*[,\)])",contenido):check(id in html.ids,f'ID TS presente {archivo}/{id}')
 check('datos.traza.map' in ts and 'ejecucion.traza.slice' in ts,'Consume eventos backend')
 check('innerHTML' not in ts,'Inserción segura textContent')
 check('token: escenarioElegido().token, titulo' in ts,'Entrada token/titulo')
