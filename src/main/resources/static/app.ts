@@ -1,3 +1,5 @@
+import { iniciarSimulacion, prepararSimulacion, mostrarSimulacion } from './simulacion.js';
+
 type Estado = 'PENDIENTE' | 'EJECUTANDO' | 'CONTINUA' | 'RECHAZA' | 'COMPLETA' | 'NO_EJECUTADO';
 type Direccion = 'IDA' | 'RETORNO' | 'OMISION' | 'VALIDACION';
 interface EventoTraza {
@@ -146,6 +148,7 @@ formulario.addEventListener('submit', async evento => {
   texto('result-code', '…'); elemento('result-code').className = 'result-code';
   texto('result-title', 'Procesando en Java'); texto('result-detail', 'Esperando la respuesta del servidor local');
   texto('audit-title', 'Esperando la respuesta'); ['audit-id','audit-user','audit-date','audit-code'].forEach(id => texto(id, '—'));
+  prepararSimulacion('Esperando el resultado de la nueva solicitud en Java…');
   dibujar();
   try {
     const respuesta = await fetch('api/radicaciones', {
@@ -159,11 +162,13 @@ formulario.addEventListener('submit', async evento => {
     ejecucion = datos;
     selector.replaceChildren(new Option('Seleccionar un paso', '-1'), ...datos.traza.map((e, i) => new Option(`${e.paso}. ${e.manejador} · ${e.estado}`, String(i))));
     mostrarResultado();
+    mostrarSimulacion(datos);
   } catch (fallo) {
     error.textContent = `No se pudo obtener la traza del servidor local. ${fallo instanceof Error ? fallo.message : 'Comprueba la conexión'}. Si hubo un corte tras enviar, revisa /api/propuestas antes de reintentar.`;
     error.hidden = false; texto('result-code', '—'); texto('result-title', 'Sin respuesta verificable');
     texto('result-detail', 'No se reproduce una traza sin respuesta del backend.');
     texto('audit-title', 'Sin respuesta verificable');
+    prepararSimulacion('No llegó una respuesta verificable. No se simula un resultado; revisa la conexión con Java.');
     selector.replaceChildren(new Option('Sin traza', '-1'));
   } finally {
     enviando = false;
@@ -184,6 +189,18 @@ nodos.forEach(nodo => nodo.addEventListener('click', () => {
   if (indice >= 0) { pausar(); posicion = indice; dibujar(); }
 }));
 movimientoReducido.addEventListener('change', () => { if (movimientoReducido.matches) pausar(); });
+iniciarSimulacion(cuenta => {
+  const radio = formulario.querySelector<HTMLInputElement>(`input[name="escenario"][value="${cuenta}"]`);
+  if (radio) radio.checked = true;
+  texto('scenario-detail', escenarioElegido().descripcion);
+}, (cuenta, titulo) => {
+  if (enviando) return;
+  const radio = formulario.querySelector<HTMLInputElement>(`input[name="escenario"][value="${cuenta}"]`);
+  if (radio) radio.checked = true;
+  elemento<HTMLInputElement>('titulo').value = titulo;
+  texto('scenario-detail', escenarioElegido().descripcion);
+  formulario.requestSubmit();
+});
 texto('scenario-detail', escenarioElegido().descripcion);
 controles();
 export {};
