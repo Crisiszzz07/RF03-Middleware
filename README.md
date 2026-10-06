@@ -100,6 +100,19 @@ Los fragmentos se extraen en Java, con `FragmentosFuente`, entre comentarios `@f
 
 Las etiquetas de los estados y los tokens precargados son configuración visual; JavaScript no decide si autentica, autoriza ni radica. Se utiliza `textContent` para mostrar datos y código. La interfaz usa fuentes del sistema, navegación por teclado y foco visible. Con `prefers-reduced-motion` no inicia la reproducción automáticamente y elimina las transiciones. En móvil la cadena es vertical.
 
+## Simulación de la reacción de un ERP
+
+El componente es una **mini pantalla de ERP incrustada**, con marco de ventana, barra de aplicación, sesión visible y navegación «Radicación / Mi propuesta». Las vistas usan el **resultado devuelto por Java**, aunque se cambie la selección del formulario exterior. No añaden eventos a la traza ni deciden los permisos.
+
+- **401:** abre una vista de recuperación de sesión. Seleccione una cuenta ficticia y pulse «Entrar con cuenta de demostración». Aparece el borrador conservado: puede editar el título y pulsar **«Reintentar radicación» dentro de la pantalla**. Este botón envía una nueva petición real a Java, con la credencial de demostración elegida. Seleccionar una cuenta por sí solo no autentica ni reenvía; Java valida la identidad al recibir el reintento. Un evaluador elegido después del 401 obtendrá 403.
+- **403:** «Solicitar acceso» abre un formulario con motivo, validación y opción de cancelar. Al enviarlo, muestra un **ticket ficticio local** con cuenta, motivo y estado «Pendiente de revisión». No envía mensajes, no persiste tickets ni concede permisos. La misma identidad sigue sin poder radicar. Puede volver a la radicación o consultar de nuevo su constancia simulada.
+- **200:** «Abrir mi propuesta» o «Mi propuesta» consulta el identificador real mediante `GET /api/propuestas` y abre una vista con título, radicado y autor. Puede volver al comprobante. El recorrido «Radicada → Revisión → Decisión» distingue el registro actual de las etapas futuras ilustrativas: no se evalúa ni aprueba nada.
+- **400 o error de conexión:** no presenta una recuperación de sesión ni una radicación inventada. Solicita corregir los datos o esperar una respuesta verificable.
+
+Las vistas, borradores y tickets se reinician al enviar otra petición. Una consulta tardía de una propuesta anterior no puede reemplazar el resultado nuevo. La navegación local no crea propuestas ni registra nuevas auditorías; solo el reintento ejecuta otra vez la cadena. El módulo `simulacion.ts` y su JavaScript compilado están incluidos, sin dependencias nuevas. En móvil la navegación se dispone horizontalmente y las vistas se ajustan al ancho disponible.
+
+Pruebas de interacción sin navegador: `node tools/simulacion.test.mjs` (Node 22 o posterior). Usan elementos verificados contra los IDs del HTML real y transporte de lectura controlado para comprobar las acciones y el aislamiento; no certifican el diseño visual ni el servidor HTTP. `tools/verificar_interfaz.mjs` también comprueba formularios, navegación y reintento contra Java real cuando el entorno permite iniciar el navegador y el servidor.
+
 ## Estructura
 
 ```text
@@ -119,7 +132,7 @@ outputs/                              ZIP generado; JAR solo si se compiló
 
 Desde la interfaz abra la sección UML. Las vistas SVG se pueden abrir en otra pestaña y ampliar; las fuentes `.puml` son editables y descargables. También están en `docs/`. Los atributos/métodos fundamentales, herencia y referencia al sucesor corresponden a las clases reales; los constructores, getters completos y records anidados se abrevian expresamente para legibilidad.
 
-`tools/generar_uml.py` genera PlantUML y las vistas SVG desde un modelo común. Los SVG son una representación local trazada por ese script, **no una renderización realizada por PlantUML**. Las fuentes PlantUML detallan las dependencias adicionales de datos y apoyo. El diagrama de secuencia cubre las tres alternativas y la llamada común a `registrar` después del retorno. La validación previa se identifica fuera de la cadena.
+`tools/generar_uml.py` genera PlantUML y las vistas SVG desde un modelo común. Los SVG son una representación local trazada por ese script, **no una renderización realizada por PlantUML**. Las referencias se muestran una sola vez como atributos, con visibilidad y multiplicidad; el sucesor es de solo lectura y se fija en el constructor. Las dos vistas comparten el modelo de clases y los mensajes de secuencia del generador. El diagrama de secuencia cubre las tres alternativas, participantes separados para los cuatro servicios y la solicitud, y la llamada común a `registrar` después del retorno. Las llamadas se dibujan con líneas continuas y los retornos con líneas discontinuas. Solo representa respuestas normales 401/403/200; omite la instrumentación y excepciones inesperadas. La validación previa se identifica fuera de la cadena.
 
 ## Pruebas y desarrollo
 
@@ -132,7 +145,7 @@ Informes: `target/surefire-reports/`. Un fallo en pruebas impide `verify`. No us
 
 No hay compilación frontend separada requerida para iniciar o compilar el proyecto: `app.js` ya está incluido. `app.ts` es su fuente, compilada con TypeScript **5.9.3**, configuración `tsconfig.json`. Si modifica TypeScript, regenere con `tsc -p tsconfig.json` usando esa versión y conserve ambos archivos. Esta herramienta es opcional para desarrollo y no se descarga ni ejecuta al arrancar la aplicación.
 
-Para volver a generar UML, si modifica su modelo: `python3 tools/generar_uml.py` (Windows con Python: `py tools/generar_uml.py`). Para empaquetar fuentes: `python3 tools/empaquetar.py`. Python tampoco es un requisito de ejecución del prototipo.
+Para comprobar su contrato UML: `python3 -m unittest discover -s tools -p 'test_uml.py'`. Para volver a generar UML, si modifica su modelo: `python3 tools/generar_uml.py` (Windows con Python: `py tools/generar_uml.py`). Para empaquetar fuentes: `python3 tools/empaquetar.py`. Use `--solo-fuentes` para actualizar el ZIP sin copiar un JAR previo. Python tampoco es un requisito de ejecución del prototipo.
 
 Se incluye `tools/verificar_interfaz.mjs` para ejecutar los tres escenarios **contra Java real**, comprobar controles y anchos 320/375/414/768/1280 con Playwright cuando esté disponible. Es opcional y requiere Node y Playwright de desarrollo (`npm install --no-save playwright`, `npx playwright install chromium` y `node tools/verificar_interfaz.mjs` con Java iniciado). No intercepta ni simula `/api`. No se ha podido ejecutar en esta entrega.
 
