@@ -16,4 +16,4 @@ Bibliografía consultada:
 
 [2] Robert C. Martin ("Uncle Bob")	Clean Architecture: A Craftsman's Guide to Software Structure and Design. Prentice Hall (2017).	Capítulo 7 (Single Responsibility) y Capítulo 8 (Open/Closed Principle).
 
-[3] Mark Richards & Neal Ford	Fundamentals of Software Architecture: An Engineering Approach. O'Reilly Media (2020).	Capítulo 6: Análisis de cohesión y acoplamiento en arquitecturas modulares.
+[3] Mark Richards & Neal Ford	Fundamentals of Software Architecture: An Engineering Approach. O'Reilly Media (2020).	Capítulo 3, “Modularity”: análisis de cohesión y acoplamiento. Índice oficial de la edición de 2020: https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/titlepage01.html .

@@ -8,6 +8,8 @@ Prototipo académico para radicar una propuesta de investigación. **RF03 corres
 
 Requisito: **JDK 17**, con `java -version` y `javac -version` funcionando. Configure `JAVA_HOME` con la carpeta del JDK si fuera necesario. No incluya `bin` en esa variable. Maven se descarga con el Wrapper; no necesita instalarlo por separado.
 
+
+(Opción zip añadida por requisito de la actividad de la materia)
 Descomprima el ZIP y abra una terminal en la carpeta `rf03-chain` que contiene `pom.xml`.
 
 Windows (PowerShell):
@@ -101,7 +103,7 @@ Los fragmentos se extraen en Java, con `FragmentosFuente`, entre comentarios `@f
 Las etiquetas de los estados y los tokens precargados son configuración visual; JavaScript no decide si autentica, autoriza ni radica. Se utiliza `textContent` para mostrar datos y código. La interfaz usa fuentes del sistema, navegación por teclado y foco visible. Con `prefers-reduced-motion` no inicia la reproducción automáticamente y elimina las transiciones. En móvil la cadena es vertical.
 
 ## Simulación de la reacción de un ERP
-
+![img_5.png](img_5.png)
 El componente es una **mini pantalla de ERP incrustada**, con marco de ventana, barra de aplicación, sesión visible y navegación «Radicación / Mi propuesta». Las vistas usan el **resultado devuelto por Java**, aunque se cambie la selección del formulario exterior. No añaden eventos a la traza ni deciden los permisos.
 
 - **401:** abre una vista de recuperación de sesión. Seleccione una cuenta ficticia y pulse «Entrar con cuenta de demostración». Aparece el borrador conservado: puede editar el título y pulsar **«Reintentar radicación» dentro de la pantalla**. Este botón envía una nueva petición real a Java, con la credencial de demostración elegida. Seleccionar una cuenta por sí solo no autentica ni reenvía; Java valida la identidad al recibir el reintento. Un evaluador elegido después del 401 obtendrá 403.
@@ -168,4 +170,4 @@ No se requieren recursos remotos durante la demostración. Las referencias exter
 
 Compatibilidad verificada en la [documentación oficial de Spring Boot 3.5](https://docs.spring.io/spring-boot/3.5/system-requirements.html): mínimo Java 17 y Maven 3.6.3. La versión fijada de esta entrega es Spring Boot 3.5.16; Maven 3.9.11 supera el mínimo. Más referencias verificables y procedencia del Wrapper en [docs/REFERENCIAS.md](docs/REFERENCIAS.md), incluyendo bibliografía consultada para el estudio de este patrón.
 
-Esta solución es un ejemplo a más profundidad de este patrón en Java; se apoya con los labs y ejemplos más generales (y en más lenguajes) presentes en el siguiente repositorio: https://github.com/Crisiszzz07/LAB_architectural-design-patterns (o se puede consultar desde la página: https://chainofresponsibility.vercel.app/)
+Esta solución es un ejemplo a más profundidad de este patrón en Java; se apoya con los labs y ejemplos más generales (y en más lenguajes) presentes en el siguiente repositorio: https://github.com/Crisiszzz07/LAB_architectural-design-patterns (o se puede consultar desde la página: https://chain-of-respon.duckdns.org/)

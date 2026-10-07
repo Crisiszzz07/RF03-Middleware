@@ -1,15 +1,21 @@
 # Verificación de la entrega
 
-## Comprobaciones realizadas en entorno local (Fedora WSL2 / Java 17)
+**Entrega actual: ZIP solo de fuentes.** `outputs/rf03-chain-fuentes.zip` contiene código, pruebas, Maven Wrapper, recursos de interfaz y documentación; no incluye un JAR ejecutable. Se genera con `python3 tools/empaquetar.py --solo-fuentes`. Un JAR que exista por separado en `outputs/` no forma parte de este ZIP ni queda actualizado con ese comando. Para generar uno actualizado, primero ejecute `./mvnw clean verify` (Windows: `.\mvnw.cmd clean verify`) y, si termina correctamente, `python3 tools/empaquetar.py`.
+
+**Reproducción y reenvío son acciones diferentes.** Reiniciar o volver a reproducir la traza no envía otra petición ni crea otra propuesta. Reenviar una petición exitosa sí puede crear una propuesta adicional: la radicación no implementa idempotencia ni deduplicación de solicitudes.
+
+Las comprobaciones históricas de abajo corresponden a una versión anterior; no certifican la ejecución de la versión actual ni el contenido de su ZIP. Las actualizaciones posteriores detallan lo verificado y lo pendiente en cada cambio.
+
+## Registro histórico: comprobaciones en entorno local (Fedora WSL2 / Java 17)
 
 | Comprobación | Estado | Evidencia / Observaciones |
 |---|---|---|
 | Compilación Java y empaquetado JAR | Superado | Compilado exitosamente mediante Eclipse Temurin JDK 17.0.14 y Maven Wrapper (`BUILD SUCCESS`). |
 | Pruebas automatizadas (JUnit / Mockito) | Superado | Suite completa de pruebas ejecutada sin fallos ni errores reportados en `target/surefire-reports/`. |
 | Arranque de Spring Boot | Superado | Tomcat levantado en puerto 8080 bajo Java 17 en entorno Linux Fedora. |
-| Escenarios de la cadena (401, 403 y 200) | Superado | Se verificó la interrupción correcta de la cadena en fallos de autenticación/autorización y omisión de eslabones posteriores. Idempotencia validada en reinicio. |
+| Escenarios de la cadena (401, 403 y 200) | Superado | Se verificó la interrupción correcta de la cadena en fallos de autenticación/autorización y omisión de eslabones posteriores. Se comprobó que reiniciar la reproducción no crea otra propuesta; esto no garantiza idempotencia al reenviar peticiones. |
 | Responsividad y accesibilidad web | Superado | Diseño fluido verificado en 320px, 375px, 414px, 768px y 1280px. Foco visible por teclado validado. |
-| Generación de artefactos finales | Superado | Ejecución de `tools/empaquetar.py` completada; JAR generado e integrado en el archivo ZIP final de entrega. |
+| Generación de artefactos finales | Superado | Se registró la generación de un JAR en aquella entrega. Esta anotación histórica no describe el ZIP actual: el empaquetador crea un ZIP de fuentes y, cuando corresponde, copia el JAR como archivo separado en `outputs/`. |
 ## Actualización: simulación de la reacción del ERP (2026-10-06)
 
 Las verificaciones anteriores describen la entrega previa. Para el nuevo componente:
