@@ -29,30 +29,31 @@ CLASES = [
     ('RadicarPropuestaHandler', 'ConcreteHandler · terminal', 1100, 450, 320,
      ['- repositorio: RepositorioPropuestasEnMemoria [1] {readOnly}'], [PROCESAR]),
     ('RegistroAuditoriaEnMemoria', 'Servicio simulado', 35, 720, 320,
-     ['- registros: CopyOnWriteArrayList<Registro>'],
+     ['- registros: CopyOnWriteArrayList<Registro> {readOnly}'],
      ['+ registrar(solicitud: SolicitudRadicacion, respuesta: RespuestaRadicacion): Registro', '+ listar(): List<Registro>']),
     ('ValidadorTokenSimulado', 'Servicio simulado', 385, 720, 325,
-     ['- identidades: Map<String, IdentidadSimulada>'], ['+ validar(token: String): Optional<IdentidadSimulada>']),
+     ['- identidades: Map<String, IdentidadSimulada> {readOnly}'], ['+ validar(token: String): Optional<IdentidadSimulada>']),
     ('PoliticaPermisosSimulada', 'Servicio simulado', 740, 720, 330, [],
      ['+ puedeRadicar(identidad: IdentidadSimulada): boolean']),
     ('RepositorioPropuestasEnMemoria', 'Almacenamiento en memoria', 1100, 720, 320,
-     ['- propuestas: ConcurrentHashMap<String, Propuesta>', '- secuencia: AtomicInteger'],
+     ['- propuestas: ConcurrentHashMap<String, Propuesta> {readOnly}', '- secuencia: AtomicInteger {readOnly}'],
      ['+ guardar(solicitud: SolicitudRadicacion): String', '+ listar(): List<Propuesta>']),
     ('SolicitudRadicacion', 'Contexto por petición', 35, 1090, 440,
-     ['- id: String', '- token: String (no serializado)', '- titulo: String', '- identidad: IdentidadSimulada [0..1]', '- traza: List<EventoTraza>'],
+     ['- id: String {readOnly}', '- token: String (no serializado) {readOnly}', '- titulo: String {readOnly}', '- identidad: IdentidadSimulada [0..1]', '- traza: List<EventoTraza> {readOnly}'],
      ['+ autenticar(identidad: IdentidadSimulada): void', '+ evento(...): void', '+ traza(): List<EventoTraza>']),
     ('RespuestaRadicacion', 'record · resultado', 520, 1090, 405,
-     ['- codigo: int', '- mensaje: String', '- propuestaId: String [0..1]'], []),
+     ['- codigo: int {readOnly}', '- mensaje: String {readOnly}', '- propuestaId: String [0..1] {readOnly}'], []),
     ('EventoTraza', 'record · instantánea', 975, 1090, 445,
-     ['- paso: int; manejador, metodo: String', '- estado, direccion, accion, motivo: String', '- identidad, titulo: String; codigo: Integer', '- archivo, fragmento, explicacion: String'], []),
-    ('IdentidadSimulada', 'record · perfil del validador', 520, 1290, 405,
-     ['- usuario: String', '- perfil: Perfil (INVESTIGADOR | EVALUADOR)'], []),
-    ('RadicacionController', 'Adaptador HTTP externo al patrón', 35, 1430, 440,
+     ['- paso: int {readOnly}; manejador, metodo: String {readOnly}', '- estado, direccion, accion, motivo: String {readOnly}', '- identidad, titulo: String {readOnly}; codigo: Integer {readOnly}', '- archivo, fragmento, explicacion: String {readOnly}'], []),
+    ('IdentidadSimulada', 'record · perfil del validador', 520, 1390, 405,
+     ['- usuario: String {readOnly}', '- perfil: Perfil (INVESTIGADOR | EVALUADOR) {readOnly}'], []),
+    ('RadicacionController', 'Adaptador HTTP externo al patrón', 35, 1570, 440,
      ['- cliente: ClienteRadicacion [1] {readOnly}', '- repositorio: RepositorioPropuestasEnMemoria [1] {readOnly}', '- auditoria: RegistroAuditoriaEnMemoria [1] {readOnly}'],
      ['+ radicar(entrada: Entrada): ResponseEntity<Ejecucion>', '+ propuestas(), auditoria(), jsonInvalido()']),
-    ('FragmentosFuente', 'Utilidad de documentación', 975, 1430, 445, [], ['{static} + leer(clase: String, clave: String): String']),
+    ('FragmentosFuente', 'Utilidad de documentación', 975, 1570, 445, [], ['{static} + leer(clase: String, clave: String): String']),
 ]
 SUBCLASES = [c[0] for c in CLASES[3:7]]
+OBJETOS = dict(zip('CANVQZPRDL', ['cliente', 'auditoria', 'autenticacion', 'validador', 'solicitud', 'autorizacion', 'politica', 'radicacion', 'repositorio', 'registro']))
 
 # Participantes separados; los mensajes y alternativas son el modelo de ambas vistas.
 PARTICIPANTES = [
@@ -62,6 +63,8 @@ PARTICIPANTES = [
     ('P', 'PoliticaPermisosSimulada', 1240), ('R', 'RadicarPropuestaHandler', 1430),
     ('D', 'RepositorioPropuestasEnMemoria', 1620), ('L', 'RegistroAuditoriaEnMemoria', 1810),
 ]
+
+PARTICIPANTES = [(alias, nombre, 150 + 270 * i) for i, (alias, nombre, _) in enumerate(PARTICIPANTES)]
 
 def llamada(origen, destino, texto): return ('mensaje', origen, destino, texto, False)
 def retorno(origen, destino, texto): return ('mensaje', origen, destino, texto, True)
@@ -74,29 +77,29 @@ SECUENCIA = [
     llamada('N', 'V', 'validar(solicitud.token())'),
     retorno('V', 'N', 'Optional<IdentidadSimulada>'),
     alternativa([
-        ('identidad ausente · token inválido → 401', [
-            retorno('N', 'A', 'RespuestaRadicacion(401)'),
+        ('[identidad.isEmpty()] token inválido → 401', [
+            retorno('N', 'A', 'respuesta [codigo = 401]'),
             nota('AutorizacionMiddleware y RadicarPropuestaHandler no se invocan.'),
         ]),
-        ('identidad presente · token válido', [
+        ('[else] token válido', [
             llamada('N', 'Q', 'autenticar(identidad)'),
             retorno('Q', 'N', 'void'),
             llamada('N', 'Z', 'procesar(solicitud)'),
             llamada('Z', 'P', 'puedeRadicar(solicitud.identidad())'),
             retorno('P', 'Z', 'permiso: boolean'),
             alternativa([
-                ('sin permiso · evaluador → 403', [
-                    retorno('Z', 'N', 'RespuestaRadicacion(403)'),
-                    retorno('N', 'A', 'respuesta 403'),
+                ('[!permiso] evaluador → 403', [
+                    retorno('Z', 'N', 'respuesta [codigo = 403]'),
+                    retorno('N', 'A', 'respuesta [codigo = 403]'),
                     nota('RadicarPropuestaHandler no se invoca.'),
                 ]),
-                ('con permiso · investigador → 200', [
+                ('[else] investigador → 200', [
                     llamada('Z', 'R', 'procesar(solicitud)'),
                     llamada('R', 'D', 'guardar(solicitud)'),
                     retorno('D', 'R', 'id: String'),
-                    retorno('R', 'Z', 'RespuestaRadicacion(200, id)'),
-                    retorno('Z', 'N', 'respuesta 200'),
-                    retorno('N', 'A', 'respuesta 200'),
+                    retorno('R', 'Z', 'respuesta [codigo = 200, propuestaId = id]'),
+                    retorno('Z', 'N', 'respuesta [codigo = 200, propuestaId = id]'),
+                    retorno('N', 'A', 'respuesta [codigo = 200, propuestaId = id]'),
                 ]),
             ]),
         ]),
@@ -112,7 +115,7 @@ NOTA_ALCANCE = ('Escenarios con título válido. Se omite la instrumentación de
 def cabecera_svg(ancho, alto, titulo, descripcion):
     return [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {ancho} {alto}" role="img" aria-labelledby="title desc">',
             f'<title id="title">{escape(titulo)}</title><desc id="desc">{escape(descripcion)}</desc>',
-            '<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#66418b" stroke-width="1.5"/></marker><marker id="inherit" markerWidth="16" markerHeight="14" refX="14" refY="7" orient="auto"><path d="M1 1 L14 7 L1 13 Z" fill="white" stroke="#66418b" stroke-width="1.5"/></marker></defs>',
+            '<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#66418b" stroke-width="1.5"/></marker><marker id="sync" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#66418b" stroke="#66418b"/></marker><marker id="inherit" markerWidth="16" markerHeight="14" refX="14" refY="7" orient="auto"><path d="M1 1 L14 7 L1 13 Z" fill="white" stroke="#66418b" stroke-width="1.5"/></marker></defs>',
             f'<rect width="{ancho}" height="{alto}" fill="#faf8fe"/>',
             '<style>text{font-family:system-ui,Segoe UI,sans-serif;fill:#30213f}.title{font-size:21px;font-weight:700}.member{font-size:14px}.role{font-size:13px;fill:#6b4b88}.edge{fill:none;stroke:#66418b;stroke-width:2}</style>']
 
@@ -124,8 +127,8 @@ def texto_svg(x, y, texto, clase='member', extra=''):
 def miembros(clase):
     _, _, _, _, ancho, atributos, operaciones = clase
     limite = int((ancho - 24) / 7.3)
-    return ([linea for m in atributos for linea in wrap(m, limite)],
-            [linea for m in operaciones for linea in wrap(m, limite)])
+    return ([linea for m in atributos for linea in wrap(m.replace('{abstract} ', '').replace('{static} ', ''), limite, break_long_words=False, break_on_hyphens=False)],
+            [linea for m in operaciones for linea in wrap(m.replace('{abstract} ', '').replace('{static} ', ''), limite, break_long_words=False, break_on_hyphens=False)])
 
 
 def alto_clase(clase):
@@ -149,8 +152,9 @@ def generar_clases():
                  'end note', 'legend bottom',
                  'Constructores, getters y records anidados abreviados.',
                  'Servicios y almacenamiento simulados; no son seguridad de producción.',
+                 '{readOnly} indica referencia final; no implica inmutabilidad de su contenido.',
                  'endlegend', '@enduml'])
-    svg = cabecera_svg(1460, 1810, 'RF03: UML de clases', 'Referencias con visibilidad, multiplicidad y readOnly. Cuatro subclases del Handler abstracto; servicios simulados.')
+    svg = cabecera_svg(1460, 1980, 'RF03: UML de clases', 'Referencias con visibilidad, multiplicidad y readOnly. Cuatro subclases del Handler abstracto; servicios simulados.')
     svg.extend([texto_svg(35, 38, 'RF03 · UML de clases', 'title'),
                 texto_svg(35, 65, 'Referencias solo como atributos: visibilidad, multiplicidad y {readOnly}. Sin asociaciones duplicadas.', 'role')])
     base = CLASES[1]
@@ -159,7 +163,9 @@ def generar_clases():
         cx = clase[2] + clase[4] / 2
         svg.append(f'<path data-subclass="{clase[0]}" d="M{cx} 450 V410 H722 V{base_fin}" class="edge" marker-end="url(#inherit)"/>')
     svg.append('<path d="M1000 275 H965 V320 H940" class="edge" stroke-dasharray="6 4" marker-end="url(#arrow)"/>')
-    svg.append(texto_svg(1030, 405, 'Construye y compone la cadena', 'role'))
+    svg.append(texto_svg(945, 350, 'compone la cadena', 'role'))
+    svg.append('<path data-dependency="construye" d="M1100 302 V385 H230 V350" class="edge" stroke-dasharray="6 4" marker-end="url(#arrow)"/>')
+    svg.append(texto_svg(350, 375, 'construye', 'role'))
     svg.append(texto_svg(35, 695, 'Servicios referenciados por los manejadores · todos simulados', 'title'))
     svg.append(texto_svg(35, 1060, 'Contexto, respuesta y apoyo · tipos reales del proyecto', 'title'))
     for clase in CLASES:
@@ -176,13 +182,17 @@ def generar_clases():
             svg.append(texto_svg(x + 12, yy, linea)); yy += 24
         if atributos and operaciones:
             svg.append(f'<path d="M{x} {yy - 12} H{x + ancho}" stroke="#ded4e8"/>')
-        for linea in operaciones:
-            svg.append(texto_svg(x + 12, yy, linea)); yy += 24
+        for operacion in clase[6]:
+            estilo = (' font-style="italic"' if '{abstract}' in operacion else '') + (' text-decoration="underline"' if '{static}' in operacion else '')
+            firma = operacion.replace('{abstract} ', '').replace('{static} ', '')
+            for linea in wrap(firma, int((ancho - 24) / 7.3), break_long_words=False, break_on_hyphens=False):
+                svg.append(texto_svg(x + 12, yy, linea, extra=estilo)); yy += 24
         svg.append('</g>')
     for i, linea in enumerate(['Triángulo vacío = herencia; línea discontinua = dependencia. Constructores, getters y records anidados abreviados.',
                                'El sucesor se fija mediante constructor; no hay setters. Terminal: siguiente = null.',
-                               'Servicios y almacenamiento simulados; no representan seguridad de producción.']):
-        svg.append(texto_svg(35, 1730 + 26 * i, linea, 'role'))
+                               'Servicios y almacenamiento simulados; no representan seguridad de producción.',
+                               '{readOnly} indica referencia final; no implica inmutabilidad del contenido de las colecciones.']):
+        svg.append(texto_svg(35, 1890 + 26 * i, linea, 'role'))
     svg.append('</svg>')
     return '\n'.join(puml) + '\n', '\n'.join(svg) + '\n'
 
@@ -205,7 +215,7 @@ def bloques_puml(bloques, sangria=''):
 
 def generar_secuencia():
     puml = ['@startuml', 'title RF03 · retorno normal 401 / 403 / 200', 'hide footbox']
-    puml.extend(f'participant {nombre} as {alias}' for alias, nombre, _ in PARTICIPANTES)
+    puml.extend(f'participant "{OBJETOS[alias]}: {nombre}" as {alias}' for alias, nombre, _ in PARTICIPANTES)
     puml.append('note over C,L')
     puml.extend(wrap(NOTA_ALCANCE, 86))
     puml.append('end note')
@@ -222,25 +232,30 @@ def generar_secuencia():
                 _, origen, destino, etiqueta, es_retorno = bloque
                 xa, xb = xs[origen], xs[destino]
                 limite = max(17, int(abs(xa - xb) / 8))
-                lineas = wrap(etiqueta, limite)
+                lineas = wrap(etiqueta, limite, break_long_words=False, break_on_hyphens=False)
                 y += 22 + 19 * len(lineas)
                 mensajes.append(f'<g data-from="{origen}" data-to="{destino}" data-kind="{"retorno" if es_retorno else "llamada"}">')
                 for i, linea in enumerate(lineas):
                     mensajes.append(texto_svg((xa + xb) / 2, y - 12 - 19 * (len(lineas) - 1 - i), linea, extra='text-anchor="middle"'))
-                mensajes.append(f'<path d="M{xa} {y} H{xb}" class="edge" marker-end="url(#arrow)"' + (' stroke-dasharray="7 5"' if es_retorno else '') + '/></g>')
+                mensajes.append(f'<path d="M{xa} {y} H{xb}" class="edge" marker-end="url(#{"arrow" if es_retorno else "sync"})"' + (' stroke-dasharray="7 5"' if es_retorno else '') + '/></g>')
                 y += 22
             elif bloque[0] == 'nota':
-                mensajes.append(f'<rect x="1040" y="{y + 5}" width="820" height="40" rx="5" fill="#fff0f4" stroke="#dfbdca"/>')
+                mensajes.append(f'<rect x="1040" y="{y + 5}" width="1560" height="40" rx="5" fill="#fff0f4" stroke="#dfbdca"/>')
                 mensajes.append(texto_svg(1055, y + 31, bloque[1], 'role'))
                 y += 57
             else:
                 inicio = y
                 x = 35 + profundidad * 35
-                ancho = 1830 - profundidad * 70
+                ancho = 2630 - profundidad * 70
                 separadores = []
+                mensajes.append(f'<path data-operator="alt" d="M{x} {y} h65 v20 l-12 12 h-53 Z" fill="#eee5fa" stroke="#ad94c6"/>')
+                mensajes.append(texto_svg(x + 13, y + 22, 'alt', 'role', 'font-weight="700"'))
+                y += 37
                 for i, (condicion, rama) in enumerate(bloque[1]):
                     if i: separadores.append(y)
-                    mensajes.append(texto_svg(x + 15, y + 27, ('alt · ' if i == 0 else 'else · ') + condicion, 'role', 'font-weight="700"'))
+                    guarda, explicacion = re.match(r'(\[[^]]+\])\s*(.*)', condicion).groups()
+                    mensajes.append(texto_svg(x + 15, y + 27, guarda, 'role', 'font-weight="700" data-guard="'+escape(guarda)+'"'))
+                    mensajes.append(texto_svg(x + 290, y + 27, explicacion, 'role'))
                     y = dibujar_bloques(rama, y + 38, profundidad + 1) + 14
                 marcos.append(f'<rect data-fragment="alt" x="{x}" y="{inicio}" width="{ancho}" height="{y - inicio}" fill="none" stroke="#ad94c6" stroke-width="2"/>')
                 marcos.extend(f'<path d="M{x} {yy} H{x + ancho}" stroke="#ad94c6" stroke-dasharray="5 4"/>' for yy in separadores)
@@ -249,29 +264,21 @@ def generar_secuencia():
 
     fin = dibujar_bloques(SECUENCIA, 175)
     alto = fin + 180
-    svg = cabecera_svg(1900, alto, 'RF03: UML de secuencia', NOTA_ALCANCE)
+    svg = cabecera_svg(2740, alto, 'RF03: UML de secuencia', NOTA_ALCANCE)
     svg.append(texto_svg(30, 36, 'RF03 · Secuencia: servicios separados y retorno auditado', 'title'))
     # Marcos y líneas de vida primero; mensajes encima para que sus etiquetas no queden tapadas.
     svg.extend(marcos)
     for alias, nombre, x in PARTICIPANTES:
         svg.extend([f'<g data-participant="{alias}" data-name="{nombre}">',
-                    f'<rect x="{x - 86}" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>',
-                    texto_svg(x, 88, alias, 'role', 'text-anchor="middle"'),
+                    f'<rect x="{x - 124}" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>',
                     f'<path d="M{x} 150 V{fin + 10}" stroke="#c5b4d6" stroke-dasharray="6 5"/>'])
-        # División por palabras de CamelCase para conservar los nombres completos y legibles.
-        palabras = re.findall(r'[A-ZÁÉÍÓÚ][a-záéíóúñ]*|[0-9]+', nombre)
-        lineas, actual = [], ''
-        for palabra in palabras:
-            if len(actual + palabra) > 20 and actual: lineas.append(actual); actual = palabra
-            else: actual += palabra
-        if actual: lineas.append(actual)
-        for i, linea in enumerate(lineas):
-            svg.append(texto_svg(x, 113 + 18 * i, linea, extra='text-anchor="middle" font-weight="650"'))
+        svg.append(texto_svg(x, 96, OBJETOS[alias] + ':', 'role', 'text-anchor="middle"'))
+        svg.append(texto_svg(x, 123, nombre, extra='text-anchor="middle" font-size="12px" font-weight="650"'))
         svg.append('</g>')
     svg.extend(mensajes)
     for i, linea in enumerate(wrap(NOTA_ALCANCE, 165)):
         svg.append(texto_svg(30, fin + 43 + 25 * i, linea, 'role'))
-    svg.extend([texto_svg(30, fin + 115, 'Llamadas: líneas continuas. Retornos: líneas discontinuas. Getters simples, constructores e instrumentación omitidos.', 'role'),
+    svg.extend([texto_svg(30, fin + 115, 'Llamadas síncronas: línea continua y punta rellena. Retornos: línea discontinua y punta abierta. Getters simples, constructores e instrumentación omitidos.', 'role'),
                 texto_svg(30, fin + 145, 'Entre manejadores, continuar(solicitud) invoca procesar del sucesor. Validación de título → 400 ocurre antes de la cadena.', 'role'), '</svg>'])
     return '\n'.join(puml) + '\n', '\n'.join(svg) + '\n'
 

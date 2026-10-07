@@ -1,16 +1,16 @@
 @startuml
 title RF03 · retorno normal 401 / 403 / 200
 hide footbox
-participant ClienteRadicacion as C
-participant AuditoriaMiddleware as A
-participant AutenticacionMiddleware as N
-participant ValidadorTokenSimulado as V
-participant SolicitudRadicacion as Q
-participant AutorizacionMiddleware as Z
-participant PoliticaPermisosSimulada as P
-participant RadicarPropuestaHandler as R
-participant RepositorioPropuestasEnMemoria as D
-participant RegistroAuditoriaEnMemoria as L
+participant "cliente: ClienteRadicacion" as C
+participant "auditoria: AuditoriaMiddleware" as A
+participant "autenticacion: AutenticacionMiddleware" as N
+participant "validador: ValidadorTokenSimulado" as V
+participant "solicitud: SolicitudRadicacion" as Q
+participant "autorizacion: AutorizacionMiddleware" as Z
+participant "politica: PoliticaPermisosSimulada" as P
+participant "radicacion: RadicarPropuestaHandler" as R
+participant "repositorio: RepositorioPropuestasEnMemoria" as D
+participant "registro: RegistroAuditoriaEnMemoria" as L
 note over C,L
 Escenarios con título válido. Se omite la instrumentación de la traza. Auditoría
 registra respuestas normales 401, 403 y 200; este diagrama no representa excepciones
@@ -20,26 +20,26 @@ C -> A : procesar(solicitud)
 A -> N : procesar(solicitud)
 N -> V : validar(solicitud.token())
 V --> N : Optional<IdentidadSimulada>
-alt identidad ausente · token inválido → 401
-  N --> A : RespuestaRadicacion(401)
+alt [identidad.isEmpty()] token inválido → 401
+  N --> A : respuesta [codigo = 401]
   note over Z,R : AutorizacionMiddleware y RadicarPropuestaHandler no se invocan.
-else identidad presente · token válido
+else [else] token válido
   N -> Q : autenticar(identidad)
   Q --> N : void
   N -> Z : procesar(solicitud)
   Z -> P : puedeRadicar(solicitud.identidad())
   P --> Z : permiso: boolean
-  alt sin permiso · evaluador → 403
-    Z --> N : RespuestaRadicacion(403)
-    N --> A : respuesta 403
+  alt [!permiso] evaluador → 403
+    Z --> N : respuesta [codigo = 403]
+    N --> A : respuesta [codigo = 403]
     note over Z,R : RadicarPropuestaHandler no se invoca.
-  else con permiso · investigador → 200
+  else [else] investigador → 200
     Z -> R : procesar(solicitud)
     R -> D : guardar(solicitud)
     D --> R : id: String
-    R --> Z : RespuestaRadicacion(200, id)
-    Z --> N : respuesta 200
-    N --> A : respuesta 200
+    R --> Z : respuesta [codigo = 200, propuestaId = id]
+    Z --> N : respuesta [codigo = 200, propuestaId = id]
+    N --> A : respuesta [codigo = 200, propuestaId = id]
   end
 end
 A -> L : registrar(solicitud, respuesta)

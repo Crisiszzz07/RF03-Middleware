@@ -36,47 +36,47 @@ class RadicarPropuestaHandler {
   + procesar(solicitud: SolicitudRadicacion): RespuestaRadicacion
 }
 class RegistroAuditoriaEnMemoria {
-  - registros: CopyOnWriteArrayList<Registro>
+  - registros: CopyOnWriteArrayList<Registro> {readOnly}
   + registrar(solicitud: SolicitudRadicacion, respuesta: RespuestaRadicacion): Registro
   + listar(): List<Registro>
 }
 class ValidadorTokenSimulado {
-  - identidades: Map<String, IdentidadSimulada>
+  - identidades: Map<String, IdentidadSimulada> {readOnly}
   + validar(token: String): Optional<IdentidadSimulada>
 }
 class PoliticaPermisosSimulada {
   + puedeRadicar(identidad: IdentidadSimulada): boolean
 }
 class RepositorioPropuestasEnMemoria {
-  - propuestas: ConcurrentHashMap<String, Propuesta>
-  - secuencia: AtomicInteger
+  - propuestas: ConcurrentHashMap<String, Propuesta> {readOnly}
+  - secuencia: AtomicInteger {readOnly}
   + guardar(solicitud: SolicitudRadicacion): String
   + listar(): List<Propuesta>
 }
 class SolicitudRadicacion {
-  - id: String
-  - token: String (no serializado)
-  - titulo: String
+  - id: String {readOnly}
+  - token: String (no serializado) {readOnly}
+  - titulo: String {readOnly}
   - identidad: IdentidadSimulada [0..1]
-  - traza: List<EventoTraza>
+  - traza: List<EventoTraza> {readOnly}
   + autenticar(identidad: IdentidadSimulada): void
   + evento(...): void
   + traza(): List<EventoTraza>
 }
 class RespuestaRadicacion {
-  - codigo: int
-  - mensaje: String
-  - propuestaId: String [0..1]
+  - codigo: int {readOnly}
+  - mensaje: String {readOnly}
+  - propuestaId: String [0..1] {readOnly}
 }
 class EventoTraza {
-  - paso: int; manejador, metodo: String
-  - estado, direccion, accion, motivo: String
-  - identidad, titulo: String; codigo: Integer
-  - archivo, fragmento, explicacion: String
+  - paso: int {readOnly}; manejador, metodo: String {readOnly}
+  - estado, direccion, accion, motivo: String {readOnly}
+  - identidad, titulo: String {readOnly}; codigo: Integer {readOnly}
+  - archivo, fragmento, explicacion: String {readOnly}
 }
 class IdentidadSimulada {
-  - usuario: String
-  - perfil: Perfil (INVESTIGADOR | EVALUADOR)
+  - usuario: String {readOnly}
+  - perfil: Perfil (INVESTIGADOR | EVALUADOR) {readOnly}
 }
 class RadicacionController {
   - cliente: ClienteRadicacion [1] {readOnly}
@@ -102,5 +102,6 @@ end note
 legend bottom
 Constructores, getters y records anidados abreviados.
 Servicios y almacenamiento simulados; no son seguridad de producción.
+{readOnly} indica referencia final; no implica inmutabilidad de su contenido.
 endlegend
 @enduml

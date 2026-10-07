@@ -68,7 +68,7 @@ class ContratoUMLTest(unittest.TestCase):
         rutas = caminos(SECUENCIA)
         self.assertEqual(len(rutas), 3)
         for ruta in rutas:
-            codigo = next(int(re.search(r'RespuestaRadicacion\((\d+)', m[3])[1]) for m in ruta if 'RespuestaRadicacion(' in m[3])
+            codigo = next(int(re.search(r'codigo = (\d+)', m[3])[1]) for m in ruta if 'codigo = ' in m[3])
             llamadas = [(m[1], m[2]) for m in ruta if not m[4]]
             self.assertIn(('N', 'V'), llamadas)
             self.assertIn(('A', 'L'), llamadas)
@@ -99,7 +99,7 @@ class ContratoUMLTest(unittest.TestCase):
             self.assertLess(recibe, registra)
             self.assertLess(registra, responde)
             retorno_filtros = [m[1:3] for m in ruta if m[4] and m[1] in ['N', 'Z', 'R', 'A']]
-            codigo = next(int(re.search(r'RespuestaRadicacion\((\d+)', m[3])[1]) for m in ruta if 'RespuestaRadicacion(' in m[3])
+            codigo = next(int(re.search(r'codigo = (\d+)', m[3])[1]) for m in ruta if 'codigo = ' in m[3])
             esperado = {401: [('N', 'A'), ('A', 'C')], 403: [('Z', 'N'), ('N', 'A'), ('A', 'C')], 200: [('R', 'Z'), ('Z', 'N'), ('N', 'A'), ('A', 'C')]}
             self.assertEqual(retorno_filtros, esperado[codigo])
 
@@ -116,11 +116,60 @@ class ContratoUMLTest(unittest.TestCase):
             self.assertEqual(grupo.get('data-kind'), 'retorno' if es_retorno else 'llamada')
             path = grupo.find('s:path', ns)
             self.assertEqual(path.get('stroke-dasharray') is not None, es_retorno)
+            self.assertEqual(path.get('marker-end'), 'url(#arrow)' if es_retorno else 'url(#sync)')
             self.assertIn(f'{origen} {"-->" if es_retorno else "->"} {destino} : {etiqueta}', puml)
         self.assertEqual(root.find('s:desc', ns).text, NOTA_ALCANCE)
         self.assertIn('título válido', puml)
         self.assertIn(NOTA_ALCANCE, ' '.join(puml.split()))
         self.assertIn('400', puml)
+
+    def test_notacion_abstracta_estatica_y_dependencia_faltante(self):
+        _, svg = generar_clases()
+        root = ET.fromstring(svg)
+        ns = {'s': 'http://www.w3.org/2000/svg'}
+        self.assertNotIn('{abstract}', svg)
+        self.assertNotIn('{static}', svg)
+        abstractos = root.findall('.//s:g[@data-class="ManejadorSeguridad"]/s:text[@font-style="italic"]', ns)
+        self.assertTrue(any('procesar' in (t.text or '') for t in abstractos))
+        estaticos = root.findall('.//s:g[@data-class="FragmentosFuente"]/s:text[@text-decoration="underline"]', ns)
+        self.assertTrue(any('leer(' in (t.text or '') for t in estaticos))
+        construye = root.find('.//s:path[@data-dependency="construye"]', ns)
+        self.assertIsNotNone(construye)
+        self.assertIsNotNone(construye.get('stroke-dasharray'))
+
+    def test_final_y_componentes_record_son_readonly(self):
+        modelo = {c[0]: c[5] for c in CLASES}
+        for clase, campos in {
+            'SolicitudRadicacion': ['id', 'token', 'titulo', 'traza'],
+            'RegistroAuditoriaEnMemoria': ['registros'],
+            'ValidadorTokenSimulado': ['identidades'],
+            'RepositorioPropuestasEnMemoria': ['propuestas', 'secuencia'],
+        }.items():
+            for campo in campos:
+                atributos = [a for a in modelo[clase] if a.startswith('- ' + campo + ':')]
+                self.assertEqual(len(atributos), 1)
+                self.assertIn('{readOnly}', atributos[0])
+        for clase in ['RespuestaRadicacion', 'EventoTraza', 'IdentidadSimulada']:
+            for atributo in modelo[clase]:
+                for declaracion in atributo.split(';'):
+                    self.assertIn('{readOnly}', declaracion)
+        self.assertNotIn('{readOnly}', next(a for a in modelo['SolicitudRadicacion'] if a.startswith('- identidad:')))
+
+    def test_objetos_guardas_y_etiquetas_no_se_cortan(self):
+        puml, svg = generar_secuencia()
+        root = ET.fromstring(svg)
+        ns = {'s': 'http://www.w3.org/2000/svg'}
+        self.assertIn('"cliente: ClienteRadicacion"', puml)
+        self.assertIn('"solicitud: SolicitudRadicacion"', puml)
+        operadores = root.findall('.//s:path[@data-operator="alt"]', ns)
+        self.assertEqual(len(operadores), 2)
+        guardas = [t.get('data-guard') for t in root.findall('.//s:text[@data-guard]', ns)]
+        self.assertCountEqual(guardas, ['[identidad.isEmpty()]', '[else]', '[!permiso]', '[else]'])
+        for grupo, (_, _, _, etiqueta, _) in zip(root.findall('.//s:g[@data-from]', ns), mensajes(SECUENCIA)):
+            partes = [t.text for t in grupo.findall('s:text', ns)]
+            self.assertEqual(' '.join(partes), etiqueta)
+        self.assertNotIn('RespuestaRadicacion(', puml)
+        self.assertIn('respuesta [codigo = 200, propuestaId = id]', puml)
 
     def test_artefactos_regenerados_estan_sincronizados(self):
         for nombre, generador in [('clases', generar_clases), ('secuencia', generar_secuencia)]:

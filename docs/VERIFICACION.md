@@ -43,3 +43,11 @@ El ZIP se actualizó con fuentes y recursos compilados. El JAR anterior requiere
 - Se actualizaron el generador y las dos copias de los cuatro artefactos: `docs/` y recursos locales de la interfaz. Los SVG y PlantUML se generan desde el mismo modelo de clases y mensajes.
 - `python3 -m unittest discover -s tools -p 'test_uml.py'`: seis pruebas aprobadas. Comprueban declaraciones Java, participantes, los tres caminos, orden de auditoría, estilo de retornos y sincronización de artefactos.
 - XML de los SVG válido y 274 comprobaciones estructurales aprobadas. No se ejecutó un renderizador PlantUML ni se declara una revisión visual en navegador.
+
+## Actualización: precisión de la notación UML
+
+Sin cambios en Java. Se incorporó la dependencia discontinua `ConfiguracionCadena → ClienteRadicacion` con etiqueta «construye». La operación abstracta se representa en cursiva y la estática subrayada, sin mostrar literalmente las instrucciones de formato PlantUML. Se uniformó `{readOnly}` para las propiedades finales y componentes de records, diferenciando la referencia final de la mutabilidad del contenido de las colecciones.
+
+Las secuencias ahora muestran objetos `nombre: Clase`, llamadas síncronas con punta triangular rellena, retornos discontinuos con punta abierta, pestañas `alt` y guardas `[identidad.isEmpty()]`, `[!permiso]` y `[else]`. Los resultados se etiquetan mediante sus propiedades (`codigo`, `propuestaId`), sin abreviaciones que puedan confundirse con constructores. El ajuste del texto no corta identificadores ni expresiones de llamada; se amplió el espacio de las líneas de vida.
+
+Nueve pruebas de contrato UML aprobadas, XML válido, 274 comprobaciones estructurales y archivos PlantUML/SVG sincronizados en `docs/` y en los recursos de la interfaz. Esta actualización no certifica una ejecución Java ni una revisión visual en navegador; los diagramas completos son documentación consultable, no una única diapositiva de exposición.

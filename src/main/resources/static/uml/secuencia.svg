@@ -1,158 +1,155 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1900 2131" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2740 2129" role="img" aria-labelledby="title desc">
 <title id="title">RF03: UML de secuencia</title><desc id="desc">Escenarios con título válido. Se omite la instrumentación de la traza. Auditoría registra respuestas normales 401, 403 y 200; este diagrama no representa excepciones inesperadas.</desc>
-<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#66418b" stroke-width="1.5"/></marker><marker id="inherit" markerWidth="16" markerHeight="14" refX="14" refY="7" orient="auto"><path d="M1 1 L14 7 L1 13 Z" fill="white" stroke="#66418b" stroke-width="1.5"/></marker></defs>
-<rect width="1900" height="2131" fill="#faf8fe"/>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#66418b" stroke-width="1.5"/></marker><marker id="sync" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#66418b" stroke="#66418b"/></marker><marker id="inherit" markerWidth="16" markerHeight="14" refX="14" refY="7" orient="auto"><path d="M1 1 L14 7 L1 13 Z" fill="white" stroke="#66418b" stroke-width="1.5"/></marker></defs>
+<rect width="2740" height="2129" fill="#faf8fe"/>
 <style>text{font-family:system-ui,Segoe UI,sans-serif;fill:#30213f}.title{font-size:21px;font-weight:700}.member{font-size:14px}.role{font-size:13px;fill:#6b4b88}.edge{fill:none;stroke:#66418b;stroke-width:2}</style>
 <text x="30" y="36" class="title" >RF03 · Secuencia: servicios separados y retorno auditado</text>
-<rect data-fragment="alt" x="70" y="1028" width="1760" height="665" fill="none" stroke="#ad94c6" stroke-width="2"/>
-<path d="M70 1263 H1830" stroke="#ad94c6" stroke-dasharray="5 4"/>
-<rect data-fragment="alt" x="35" y="465" width="1830" height="1260" fill="none" stroke="#ad94c6" stroke-width="2"/>
-<path d="M35 656 H1865" stroke="#ad94c6" stroke-dasharray="5 4"/>
+<rect data-fragment="alt" x="70" y="989" width="2560" height="721" fill="none" stroke="#ad94c6" stroke-width="2"/>
+<path d="M70 1261 H2630" stroke="#ad94c6" stroke-dasharray="5 4"/>
+<rect data-fragment="alt" x="35" y="427" width="2630" height="1315" fill="none" stroke="#ad94c6" stroke-width="2"/>
+<path d="M35 636 H2665" stroke="#ad94c6" stroke-dasharray="5 4"/>
 <g data-participant="C" data-name="ClienteRadicacion">
-<rect x="14" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="100" y="88" class="role" text-anchor="middle">C</text>
-<path d="M100 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="100" y="113" class="member" text-anchor="middle" font-weight="650">ClienteRadicacion</text>
+<rect x="26" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M150 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="150" y="96" class="role" text-anchor="middle">cliente:</text>
+<text x="150" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">ClienteRadicacion</text>
 </g>
 <g data-participant="A" data-name="AuditoriaMiddleware">
-<rect x="204" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="290" y="88" class="role" text-anchor="middle">A</text>
-<path d="M290 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="290" y="113" class="member" text-anchor="middle" font-weight="650">AuditoriaMiddleware</text>
+<rect x="296" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M420 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="420" y="96" class="role" text-anchor="middle">auditoria:</text>
+<text x="420" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">AuditoriaMiddleware</text>
 </g>
 <g data-participant="N" data-name="AutenticacionMiddleware">
-<rect x="394" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="480" y="88" class="role" text-anchor="middle">N</text>
-<path d="M480 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="480" y="113" class="member" text-anchor="middle" font-weight="650">Autenticacion</text>
-<text x="480" y="131" class="member" text-anchor="middle" font-weight="650">Middleware</text>
+<rect x="566" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M690 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="690" y="96" class="role" text-anchor="middle">autenticacion:</text>
+<text x="690" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">AutenticacionMiddleware</text>
 </g>
 <g data-participant="V" data-name="ValidadorTokenSimulado">
-<rect x="584" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="670" y="88" class="role" text-anchor="middle">V</text>
-<path d="M670 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="670" y="113" class="member" text-anchor="middle" font-weight="650">ValidadorToken</text>
-<text x="670" y="131" class="member" text-anchor="middle" font-weight="650">Simulado</text>
+<rect x="836" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M960 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="960" y="96" class="role" text-anchor="middle">validador:</text>
+<text x="960" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">ValidadorTokenSimulado</text>
 </g>
 <g data-participant="Q" data-name="SolicitudRadicacion">
-<rect x="774" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="860" y="88" class="role" text-anchor="middle">Q</text>
-<path d="M860 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="860" y="113" class="member" text-anchor="middle" font-weight="650">SolicitudRadicacion</text>
+<rect x="1106" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M1230 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="1230" y="96" class="role" text-anchor="middle">solicitud:</text>
+<text x="1230" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">SolicitudRadicacion</text>
 </g>
 <g data-participant="Z" data-name="AutorizacionMiddleware">
-<rect x="964" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="1050" y="88" class="role" text-anchor="middle">Z</text>
-<path d="M1050 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="1050" y="113" class="member" text-anchor="middle" font-weight="650">Autorizacion</text>
-<text x="1050" y="131" class="member" text-anchor="middle" font-weight="650">Middleware</text>
+<rect x="1376" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M1500 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="1500" y="96" class="role" text-anchor="middle">autorizacion:</text>
+<text x="1500" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">AutorizacionMiddleware</text>
 </g>
 <g data-participant="P" data-name="PoliticaPermisosSimulada">
-<rect x="1154" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="1240" y="88" class="role" text-anchor="middle">P</text>
-<path d="M1240 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="1240" y="113" class="member" text-anchor="middle" font-weight="650">PoliticaPermisos</text>
-<text x="1240" y="131" class="member" text-anchor="middle" font-weight="650">Simulada</text>
+<rect x="1646" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M1770 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="1770" y="96" class="role" text-anchor="middle">politica:</text>
+<text x="1770" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">PoliticaPermisosSimulada</text>
 </g>
 <g data-participant="R" data-name="RadicarPropuestaHandler">
-<rect x="1344" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="1430" y="88" class="role" text-anchor="middle">R</text>
-<path d="M1430 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="1430" y="113" class="member" text-anchor="middle" font-weight="650">RadicarPropuesta</text>
-<text x="1430" y="131" class="member" text-anchor="middle" font-weight="650">Handler</text>
+<rect x="1916" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M2040 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="2040" y="96" class="role" text-anchor="middle">radicacion:</text>
+<text x="2040" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">RadicarPropuestaHandler</text>
 </g>
 <g data-participant="D" data-name="RepositorioPropuestasEnMemoria">
-<rect x="1534" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="1620" y="88" class="role" text-anchor="middle">D</text>
-<path d="M1620 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="1620" y="113" class="member" text-anchor="middle" font-weight="650">Repositorio</text>
-<text x="1620" y="131" class="member" text-anchor="middle" font-weight="650">PropuestasEnMemoria</text>
+<rect x="2186" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M2310 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="2310" y="96" class="role" text-anchor="middle">repositorio:</text>
+<text x="2310" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">RepositorioPropuestasEnMemoria</text>
 </g>
 <g data-participant="L" data-name="RegistroAuditoriaEnMemoria">
-<rect x="1724" y="65" width="172" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
-<text x="1810" y="88" class="role" text-anchor="middle">L</text>
-<path d="M1810 150 V1961" stroke="#c5b4d6" stroke-dasharray="6 5"/>
-<text x="1810" y="113" class="member" text-anchor="middle" font-weight="650">RegistroAuditoriaEn</text>
-<text x="1810" y="131" class="member" text-anchor="middle" font-weight="650">Memoria</text>
+<rect x="2456" y="65" width="248" height="85" rx="5" fill="#eee5fa" stroke="#b9a6cd"/>
+<path d="M2580 150 V1959" stroke="#c5b4d6" stroke-dasharray="6 5"/>
+<text x="2580" y="96" class="role" text-anchor="middle">registro:</text>
+<text x="2580" y="123" class="member" text-anchor="middle" font-size="12px" font-weight="650">RegistroAuditoriaEnMemoria</text>
 </g>
 <g data-from="C" data-to="A" data-kind="llamada">
-<text x="195.0" y="204" class="member" text-anchor="middle">procesar(solicitud)</text>
-<path d="M100 216 H290" class="edge" marker-end="url(#arrow)"/></g>
+<text x="285.0" y="204" class="member" text-anchor="middle">procesar(solicitud)</text>
+<path d="M150 216 H420" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="A" data-to="N" data-kind="llamada">
-<text x="385.0" y="267" class="member" text-anchor="middle">procesar(solicitud)</text>
-<path d="M290 279 H480" class="edge" marker-end="url(#arrow)"/></g>
+<text x="555.0" y="267" class="member" text-anchor="middle">procesar(solicitud)</text>
+<path d="M420 279 H690" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="N" data-to="V" data-kind="llamada">
-<text x="575.0" y="330" class="member" text-anchor="middle">validar(solicitud.token</text>
-<text x="575.0" y="349" class="member" text-anchor="middle">())</text>
-<path d="M480 361 H670" class="edge" marker-end="url(#arrow)"/></g>
+<text x="825.0" y="330" class="member" text-anchor="middle">validar(solicitud.token())</text>
+<path d="M690 342 H960" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="V" data-to="N" data-kind="retorno">
-<text x="575.0" y="412" class="member" text-anchor="middle">Optional&lt;IdentidadSimul</text>
-<text x="575.0" y="431" class="member" text-anchor="middle">ada&gt;</text>
-<path d="M670 443 H480" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
-<text x="50" y="492" class="role" font-weight="700">alt · identidad ausente · token inválido → 401</text>
+<text x="825.0" y="393" class="member" text-anchor="middle">Optional&lt;IdentidadSimulada&gt;</text>
+<path d="M960 405 H690" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<path data-operator="alt" d="M35 427 h65 v20 l-12 12 h-53 Z" fill="#eee5fa" stroke="#ad94c6"/>
+<text x="48" y="449" class="role" font-weight="700">alt</text>
+<text x="50" y="491" class="role" font-weight="700" data-guard="[identidad.isEmpty()]">[identidad.isEmpty()]</text>
+<text x="325" y="491" class="role" >token inválido → 401</text>
 <g data-from="N" data-to="A" data-kind="retorno">
-<text x="385.0" y="532" class="member" text-anchor="middle">RespuestaRadicacion(401</text>
-<text x="385.0" y="551" class="member" text-anchor="middle">)</text>
-<path d="M480 563 H290" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
-<rect x="1040" y="590" width="820" height="40" rx="5" fill="#fff0f4" stroke="#dfbdca"/>
-<text x="1055" y="616" class="role" >AutorizacionMiddleware y RadicarPropuestaHandler no se invocan.</text>
-<text x="50" y="683" class="role" font-weight="700">else · identidad presente · token válido</text>
+<text x="555.0" y="531" class="member" text-anchor="middle">respuesta [codigo = 401]</text>
+<path d="M690 543 H420" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<rect x="1040" y="570" width="1560" height="40" rx="5" fill="#fff0f4" stroke="#dfbdca"/>
+<text x="1055" y="596" class="role" >AutorizacionMiddleware y RadicarPropuestaHandler no se invocan.</text>
+<text x="50" y="663" class="role" font-weight="700" data-guard="[else]">[else]</text>
+<text x="325" y="663" class="role" >token válido</text>
 <g data-from="N" data-to="Q" data-kind="llamada">
-<text x="670.0" y="723" class="member" text-anchor="middle">autenticar(identidad)</text>
-<path d="M480 735 H860" class="edge" marker-end="url(#arrow)"/></g>
+<text x="960.0" y="703" class="member" text-anchor="middle">autenticar(identidad)</text>
+<path d="M690 715 H1230" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="Q" data-to="N" data-kind="retorno">
-<text x="670.0" y="786" class="member" text-anchor="middle">void</text>
-<path d="M860 798 H480" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<text x="960.0" y="766" class="member" text-anchor="middle">void</text>
+<path d="M1230 778 H690" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
 <g data-from="N" data-to="Z" data-kind="llamada">
-<text x="765.0" y="849" class="member" text-anchor="middle">procesar(solicitud)</text>
-<path d="M480 861 H1050" class="edge" marker-end="url(#arrow)"/></g>
+<text x="1095.0" y="829" class="member" text-anchor="middle">procesar(solicitud)</text>
+<path d="M690 841 H1500" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="Z" data-to="P" data-kind="llamada">
-<text x="1145.0" y="912" class="member" text-anchor="middle">puedeRadicar(solicitud.</text>
-<text x="1145.0" y="931" class="member" text-anchor="middle">identidad())</text>
-<path d="M1050 943 H1240" class="edge" marker-end="url(#arrow)"/></g>
+<text x="1635.0" y="892" class="member" text-anchor="middle">puedeRadicar(solicitud.identidad())</text>
+<path d="M1500 904 H1770" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="P" data-to="Z" data-kind="retorno">
-<text x="1145.0" y="994" class="member" text-anchor="middle">permiso: boolean</text>
-<path d="M1240 1006 H1050" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
-<text x="85" y="1055" class="role" font-weight="700">alt · sin permiso · evaluador → 403</text>
+<text x="1635.0" y="955" class="member" text-anchor="middle">permiso: boolean</text>
+<path d="M1770 967 H1500" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<path data-operator="alt" d="M70 989 h65 v20 l-12 12 h-53 Z" fill="#eee5fa" stroke="#ad94c6"/>
+<text x="83" y="1011" class="role" font-weight="700">alt</text>
+<text x="85" y="1053" class="role" font-weight="700" data-guard="[!permiso]">[!permiso]</text>
+<text x="360" y="1053" class="role" >evaluador → 403</text>
 <g data-from="Z" data-to="N" data-kind="retorno">
-<text x="765.0" y="1095" class="member" text-anchor="middle">RespuestaRadicacion(403)</text>
-<path d="M1050 1107 H480" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<text x="1095.0" y="1093" class="member" text-anchor="middle">respuesta [codigo = 403]</text>
+<path d="M1500 1105 H690" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
 <g data-from="N" data-to="A" data-kind="retorno">
-<text x="385.0" y="1158" class="member" text-anchor="middle">respuesta 403</text>
-<path d="M480 1170 H290" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
-<rect x="1040" y="1197" width="820" height="40" rx="5" fill="#fff0f4" stroke="#dfbdca"/>
-<text x="1055" y="1223" class="role" >RadicarPropuestaHandler no se invoca.</text>
-<text x="85" y="1290" class="role" font-weight="700">else · con permiso · investigador → 200</text>
+<text x="555.0" y="1156" class="member" text-anchor="middle">respuesta [codigo = 403]</text>
+<path d="M690 1168 H420" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<rect x="1040" y="1195" width="1560" height="40" rx="5" fill="#fff0f4" stroke="#dfbdca"/>
+<text x="1055" y="1221" class="role" >RadicarPropuestaHandler no se invoca.</text>
+<text x="85" y="1288" class="role" font-weight="700" data-guard="[else]">[else]</text>
+<text x="360" y="1288" class="role" >investigador → 200</text>
 <g data-from="Z" data-to="R" data-kind="llamada">
-<text x="1240.0" y="1330" class="member" text-anchor="middle">procesar(solicitud)</text>
-<path d="M1050 1342 H1430" class="edge" marker-end="url(#arrow)"/></g>
+<text x="1770.0" y="1328" class="member" text-anchor="middle">procesar(solicitud)</text>
+<path d="M1500 1340 H2040" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="R" data-to="D" data-kind="llamada">
-<text x="1525.0" y="1393" class="member" text-anchor="middle">guardar(solicitud)</text>
-<path d="M1430 1405 H1620" class="edge" marker-end="url(#arrow)"/></g>
+<text x="2175.0" y="1391" class="member" text-anchor="middle">guardar(solicitud)</text>
+<path d="M2040 1403 H2310" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="D" data-to="R" data-kind="retorno">
-<text x="1525.0" y="1456" class="member" text-anchor="middle">id: String</text>
-<path d="M1620 1468 H1430" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<text x="2175.0" y="1454" class="member" text-anchor="middle">id: String</text>
+<path d="M2310 1466 H2040" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
 <g data-from="R" data-to="Z" data-kind="retorno">
-<text x="1240.0" y="1519" class="member" text-anchor="middle">RespuestaRadicacion(200, id)</text>
-<path d="M1430 1531 H1050" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<text x="1770.0" y="1517" class="member" text-anchor="middle">respuesta [codigo = 200, propuestaId = id]</text>
+<path d="M2040 1529 H1500" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
 <g data-from="Z" data-to="N" data-kind="retorno">
-<text x="765.0" y="1582" class="member" text-anchor="middle">respuesta 200</text>
-<path d="M1050 1594 H480" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<text x="1095.0" y="1580" class="member" text-anchor="middle">respuesta [codigo = 200, propuestaId = id]</text>
+<path d="M1500 1592 H690" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
 <g data-from="N" data-to="A" data-kind="retorno">
-<text x="385.0" y="1645" class="member" text-anchor="middle">respuesta 200</text>
-<path d="M480 1657 H290" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<text x="555.0" y="1643" class="member" text-anchor="middle">respuesta [codigo = 200,</text>
+<text x="555.0" y="1662" class="member" text-anchor="middle">propuestaId = id]</text>
+<path d="M690 1674 H420" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
 <g data-from="A" data-to="L" data-kind="llamada">
-<text x="1050.0" y="1772" class="member" text-anchor="middle">registrar(solicitud, respuesta)</text>
-<path d="M290 1784 H1810" class="edge" marker-end="url(#arrow)"/></g>
+<text x="1500.0" y="1789" class="member" text-anchor="middle">registrar(solicitud, respuesta)</text>
+<path d="M420 1801 H2580" class="edge" marker-end="url(#sync)"/></g>
 <g data-from="L" data-to="A" data-kind="retorno">
-<text x="1050.0" y="1835" class="member" text-anchor="middle">Registro (sin token)</text>
-<path d="M1810 1847 H290" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<text x="1500.0" y="1852" class="member" text-anchor="middle">Registro (sin token)</text>
+<path d="M2580 1864 H420" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
 <g data-from="A" data-to="C" data-kind="retorno">
-<text x="195.0" y="1898" class="member" text-anchor="middle">respuesta 401 / 403 /</text>
-<text x="195.0" y="1917" class="member" text-anchor="middle">200</text>
-<path d="M290 1929 H100" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
-<text x="30" y="1994" class="role" >Escenarios con título válido. Se omite la instrumentación de la traza. Auditoría registra respuestas normales 401, 403 y 200; este diagrama no representa excepciones</text>
-<text x="30" y="2019" class="role" >inesperadas.</text>
-<text x="30" y="2066" class="role" >Llamadas: líneas continuas. Retornos: líneas discontinuas. Getters simples, constructores e instrumentación omitidos.</text>
-<text x="30" y="2096" class="role" >Entre manejadores, continuar(solicitud) invoca procesar del sucesor. Validación de título → 400 ocurre antes de la cadena.</text>
+<text x="285.0" y="1915" class="member" text-anchor="middle">respuesta 401 / 403 / 200</text>
+<path d="M420 1927 H150" class="edge" marker-end="url(#arrow)" stroke-dasharray="7 5"/></g>
+<text x="30" y="1992" class="role" >Escenarios con título válido. Se omite la instrumentación de la traza. Auditoría registra respuestas normales 401, 403 y 200; este diagrama no representa excepciones</text>
+<text x="30" y="2017" class="role" >inesperadas.</text>
+<text x="30" y="2064" class="role" >Llamadas síncronas: línea continua y punta rellena. Retornos: línea discontinua y punta abierta. Getters simples, constructores e instrumentación omitidos.</text>
+<text x="30" y="2094" class="role" >Entre manejadores, continuar(solicitud) invoca procesar del sucesor. Validación de título → 400 ocurre antes de la cadena.</text>
 </svg>
